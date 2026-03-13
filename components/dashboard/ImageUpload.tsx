@@ -1,0 +1,267 @@
+"use client";
+
+import { useState, useCallback } from "react";
+import { Upload, X, Star, Loader2, CheckCircle2 } from "lucide-react";
+import { useUploadThing } from "@/lib/uploadthing-client";
+
+export interface UploadedImage {
+  url: string;
+  key: string;
+  isPrimary: boolean;
+  name: string;
+}
+
+interface ImageUploadProps {
+  onChange?: (images: UploadedImage[]) => void;
+  value?: UploadedImage[];
+}
+
+type UploadStatus = "idle" | "uploading" | "success" | "error";
+
+interface PreviewImage {
+  id: string;
+  file: File;
+  preview: string;
+  status: UploadStatus;
+  uploadedUrl?: string;
+  uploadedKey?: string;
+  isPrimary: boolean;
+}
+
+export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
+  const [previews, setPreviews] = useState<PreviewImage[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const notify = useCallback(
+    (updated: PreviewImage[]) => {
+      const uploaded = updated
+        .filter((p) => p.uploadedUrl && p.uploadedKey)
+        .map((p) => ({
+          url: p.uploadedUrl!,
+          key: p.uploadedKey!,
+          isPrimary: p.isPrimary,
+          name: p.file.name,
+        }));
+      onChange?.(uploaded);
+    },
+    [onChange]
+  );
+
+  // ✅ Correct: useUploadThing hook — handles presign + S3 upload + CDN URL
+  const { startUpload } = useUploadThing("productImageUploader", {
+    onUploadError: (err) => {
+      console.error("UploadThing error:", err.message);
+    },
+  });
+
+  const handleUpload = useCallback(
+    async (files: File[]) => {
+      const newPreviews: PreviewImage[] = files.map((file, i) => ({
+        id: `${Date.now()}-${i}`,
+        file,
+        preview: URL.createObjectURL(file),
+        status: "uploading",
+        isPrimary: previews.length === 0 && i === 0,
+      }));
+
+      setPreviews((prev) => [...prev, ...newPreviews]);
+      setIsUploading(true);
+
+      try {
+        // startUpload returns array of { url, ufsUrl, key, name, size, ... }
+        const results = await startUpload(files);
+
+        setPreviews((prev) => {
+          const updated = prev.map((p) => {
+            const newIdx = newPreviews.findIndex((np) => np.id === p.id);
+            if (newIdx === -1) return p; // not a new preview, skip
+
+            const result = results?.[newIdx];
+            if (result) {
+              return {
+                ...p,
+                status: "success" as UploadStatus,
+                // ufsUrl is the permanent CDN URL in UploadThing v7
+                uploadedUrl: (result as any).ufsUrl ?? result.url,
+                uploadedKey: result.key,
+              };
+            }
+            return { ...p, status: "error" as UploadStatus };
+          });
+          notify(updated);
+          return updated;
+        });
+      } catch (err) {
+        console.error("Upload failed:", err);
+        setPreviews((prev) =>
+          prev.map((p) =>
+            newPreviews.find((np) => np.id === p.id)
+              ? { ...p, status: "error" as UploadStatus }
+              : p
+          )
+        );
+      } finally {
+        setIsUploading(false);
+      }
+    },
+    [previews.length, notify, startUpload]
+  );
+
+  const handleFiles = (fileList: FileList | File[]) => {
+    const files = Array.from(fileList).filter((f) => f.type.startsWith("image/"));
+    if (files.length > 0) handleUpload(files);
+  };
+
+  const handleRemove = (id: string) => {
+    setPreviews((prev) => {
+      const filtered = prev.filter((p) => p.id !== id);
+      if (filtered.length > 0 && !filtered.some((p) => p.isPrimary)) {
+        filtered[0].isPrimary = true;
+      }
+      notify(filtered);
+      return [...filtered];
+    });
+  };
+
+  const handleSetPrimary = (id: string) => {
+    setPreviews((prev) => {
+      const updated = prev.map((p) => ({ ...p, isPrimary: p.id === id }));
+      notify(updated);
+      return updated;
+    });
+  };
+
+  return (
+    <div className="space-y-3">
+      {/* Drop zone */}
+      <div
+        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+        onDragLeave={() => setIsDragging(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setIsDragging(false);
+          handleFiles(e.dataTransfer.files);
+        }}
+        onClick={() => !isUploading && document.getElementById("ut-image-input")?.click()}
+        className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 cursor-pointer group ${
+          isDragging
+            ? "border-indigo-500 bg-indigo-500/10"
+            : isUploading
+            ? "border-zinc-600 bg-zinc-800/20 cursor-not-allowed"
+            : "border-zinc-700/60 hover:border-zinc-600 hover:bg-zinc-800/30"
+        }`}
+      >
+        <input
+          id="ut-image-input"
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          disabled={isUploading}
+          onChange={(e) => e.target.files && handleFiles(e.target.files)}
+        />
+        <div className="flex flex-col items-center gap-3">
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${
+            isDragging ? "bg-indigo-500/20 text-indigo-400"
+            : isUploading ? "bg-zinc-800 text-zinc-500"
+            : "bg-zinc-800 text-zinc-500 group-hover:text-zinc-300"
+          }`}>
+            {isUploading
+              ? <Loader2 className="w-6 h-6 animate-spin" />
+              : <Upload className="w-6 h-6" />
+            }
+          </div>
+          <div>
+            <p className="text-sm font-medium text-zinc-300">
+              {isUploading ? "Uploading..." : <>Drop images here or <span className="text-indigo-400">browse</span></>}
+            </p>
+            <p className="text-xs text-zinc-600 mt-1">PNG, JPG, WEBP · Up to 4MB each · Max 8 images</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Preview grid */}
+      {previews.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          {previews.map((img) => (
+            <div
+              key={img.id}
+              className={`relative group rounded-xl overflow-hidden border aspect-square transition-all ${
+                img.isPrimary
+                  ? "border-indigo-500/70 ring-1 ring-indigo-500/30"
+                  : "border-zinc-800 hover:border-zinc-600"
+              }`}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={img.preview} alt="Preview" className="w-full h-full object-cover" />
+
+              {/* Uploading spinner */}
+              {img.status === "uploading" && (
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                  <Loader2 className="w-6 h-6 text-white animate-spin" />
+                </div>
+              )}
+
+              {/* Success tick */}
+              {img.status === "success" && (
+                <div className="absolute top-2 right-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 drop-shadow" />
+                </div>
+              )}
+
+              {/* Error state */}
+              {img.status === "error" && (
+                <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+                  <p className="text-red-400 text-xs font-medium px-2 text-center">Upload failed</p>
+                </div>
+              )}
+
+              {/* Hover actions */}
+              {img.status !== "uploading" && (
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                  {!img.isPrimary && img.status === "success" && (
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); handleSetPrimary(img.id); }}
+                      className="w-8 h-8 rounded-lg bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 flex items-center justify-center hover:bg-yellow-500/30 transition-colors"
+                    >
+                      <Star className="w-4 h-4" />
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); handleRemove(img.id); }}
+                    className="w-8 h-8 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 flex items-center justify-center hover:bg-red-500/30 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/* Primary badge */}
+              {img.isPrimary && (
+                <div className="absolute top-2 left-2 flex items-center gap-1 bg-indigo-600/90 text-white text-[10px] font-medium px-2 py-0.5 rounded-full">
+                  <Star className="w-2.5 h-2.5 fill-current" />Primary
+                </div>
+              )}
+
+              {/* Filename */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-2 py-2">
+                <p className="text-[10px] text-zinc-300 truncate">{img.file.name}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Status line */}
+      {previews.length > 0 && (
+        <p className="text-xs text-zinc-600">
+          {previews.filter((p) => p.status === "success").length} of {previews.length} uploaded
+          {isUploading && " · Uploading..."}
+        </p>
+      )}
+    </div>
+  );
+}
