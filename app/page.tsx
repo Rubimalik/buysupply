@@ -66,7 +66,7 @@ export default function Home() {
               </span>
 
               <Link
-                href="/products?category=printer"
+                href="/products"
                 className="w-[62px] h-[62px] sm:w-[75px] sm:h-[75px] md:w-[85px] md:h-[85px] 
                            rounded-full transition-all duration-300 
                            hover:scale-105 active:scale-95 shadow-lg overflow-hidden"
@@ -92,7 +92,7 @@ export default function Home() {
               </span>
 
               <Link
-                href="/products?category=consumables"
+                href="/products"
                 className="w-[62px] h-[62px] sm:w-[75px] sm:h-[75px] md:w-[85px] md:h-[85px] 
                            rounded-full transition-all duration-300 
                            hover:scale-105 active:scale-95 shadow-lg overflow-hidden"
