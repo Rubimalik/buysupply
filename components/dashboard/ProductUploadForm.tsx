@@ -11,18 +11,18 @@ import {
 
 // Matches your Prisma schema exactly
 type ProductFormData = {
-  name:        string;
+  name: string;
   description: string;
-  price:       string;
-  status:      "draft" | "active" | "archived";
-  tags:        string;
-  images:      UploadedImage[];
+  price: string;
+  status: "draft" | "active" | "archived";
+  tags: string;
+  images: UploadedImage[];
 };
 
 const statuses = [
-  { value: "draft",    label: "Draft",    desc: "Not visible to customers", dot: "bg-zinc-500" },
-  { value: "active",   label: "Active",   desc: "Listed and available",     dot: "bg-emerald-500" },
-  { value: "archived", label: "Archived", desc: "Hidden from store",        dot: "bg-amber-500" },
+  { value: "draft", label: "Draft", desc: "Not visible to customers", dot: "bg-zinc-500" },
+  { value: "active", label: "Active", desc: "Listed and available", dot: "bg-emerald-500" },
+  { value: "archived", label: "Archived", desc: "Hidden from store", dot: "bg-amber-500" },
 ] as const;
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
@@ -128,7 +128,7 @@ export function ProductUploadForm() {
   });
 
   const descriptionValue = watch("description") || "";
-  const watchedImages    = watch("images") || [];
+  const watchedImages = watch("images") || [];
 
   const onSubmit = async (data: ProductFormData) => {
     // Guard: must have at least one successfully uploaded image
@@ -142,24 +142,24 @@ export function ProductUploadForm() {
 
     try {
       const payload = {
-        name:        data.name,
+        name: data.name,
         description: data.description || undefined,
         // price is a string from the input — coerce to number, or null if empty
-        price:       data.price ? parseFloat(data.price) : null,
-        status:      data.status,
-        tags:        data.tags || undefined,
+        price: data.price ? parseFloat(data.price) : null,
+        status: data.status,
+        tags: data.tags || undefined,
         // images come from UploadedImage[] — already have url + key from UploadThing
         images: data.images.map((img) => ({
-          url:       img.url,
-          key:       img.key,
+          url: img.url,
+          key: img.key,
           isPrimary: img.isPrimary,
         })),
       };
 
       const res = await fetch("/api/product", {
-        method:  "POST",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify(payload),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
@@ -190,10 +190,10 @@ export function ProductUploadForm() {
 
   // Checklist — live reactive checks
   const checklist = [
-    { label: "Add product name",          done: !!watch("name") },
-    { label: "Write a description",       done: descriptionValue.length >= 20 },
+    { label: "Add product name", done: !!watch("name") },
+    { label: "Write a description", done: descriptionValue.length >= 20 },
     { label: "Upload at least one image", done: watchedImages.length > 0 },
-    { label: "Set a price",               done: !!watch("price") },
+    { label: "Set a price", done: !!watch("price") },
   ];
 
   return (
@@ -259,25 +259,6 @@ export function ProductUploadForm() {
               </p>
             )}
           </Card>
-
-          {/* Pricing */}
-          <Card title="Pricing" icon={DollarSign}>
-            <div className="grid grid-cols-2 gap-4">
-              <Field label="Price" error={errors.price?.message}>
-                <Input
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  prefix="£"
-                  placeholder="0.00"
-                  error={!!errors.price}
-                  {...register("price", {
-                    min: { value: 0, message: "Price must be positive" },
-                  })}
-                />
-              </Field>
-            </div>
-          </Card>
         </div>
 
         {/* ── Right Column ── */}
@@ -325,11 +306,10 @@ export function ProductUploadForm() {
             <ul className="space-y-2 text-xs">
               {checklist.map((item) => (
                 <li key={item.label} className="flex items-center gap-2">
-                  <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
-                    item.done
+                  <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 transition-colors ${item.done
                       ? "border-emerald-500 bg-emerald-500/20"
                       : "border-zinc-700"
-                  }`}>
+                    }`}>
                     {item.done
                       ? <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
                       : <div className="w-1.5 h-1.5 rounded-full bg-zinc-700" />

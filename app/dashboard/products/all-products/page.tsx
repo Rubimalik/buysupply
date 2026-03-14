@@ -35,20 +35,20 @@ interface Pagination {
 }
 
 const STATUS_CONFIG = {
-  active:   { label: "Active",   classes: "bg-emerald-500/15 text-emerald-400 border-emerald-500/25", dot: "bg-emerald-400" },
-  draft:    { label: "Draft",    classes: "bg-zinc-500/15 text-zinc-400 border-zinc-500/25",         dot: "bg-zinc-400"    },
-  archived: { label: "Archived", classes: "bg-amber-500/15 text-amber-400 border-amber-500/25",      dot: "bg-amber-400"   },
+  active: { label: "Active", classes: "bg-emerald-500/15 text-emerald-400 border-emerald-500/25", dot: "bg-emerald-400" },
+  draft: { label: "Draft", classes: "bg-zinc-500/15 text-zinc-400 border-zinc-500/25", dot: "bg-zinc-400" },
+  archived: { label: "Archived", classes: "bg-amber-500/15 text-amber-400 border-amber-500/25", dot: "bg-amber-400" },
 };
 
 export default function AllProductsPage() {
-  const [products, setProducts]       = useState<Product[]>([]);
-  const [pagination, setPagination]   = useState<Pagination | null>(null);
-  const [loading, setLoading]         = useState(true);
-  const [error, setError]             = useState("");
-  const [search, setSearch]           = useState("");
+  const [products, setProducts] = useState<Product[]>([]);
+  const [pagination, setPagination] = useState<Pagination | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [page, setPage]               = useState(1);
-  const [deletingId, setDeletingId]   = useState<number | null>(null);
+  const [page, setPage] = useState(1);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<Product | null>(null);
 
   const fetchProducts = useCallback(async () => {
@@ -56,10 +56,10 @@ export default function AllProductsPage() {
     setError("");
     try {
       const params = new URLSearchParams({ page: String(page), limit: "12" });
-      if (search)       params.set("search", search);
+      if (search) params.set("search", search);
       if (statusFilter) params.set("status", statusFilter);
 
-      const res  = await fetch(`/api/product?${params}`);
+      const res = await fetch(`/api/product?${params}`);
       const data = await res.json();
       console.log("Fetched products:", data);
       if (!res.ok) throw new Error(data.error || "Failed to load");
@@ -94,8 +94,8 @@ export default function AllProductsPage() {
     }
   };
 
-  const totalActive   = products.filter((p) => p.status === "active").length;
-  const totalDraft    = products.filter((p) => p.status === "draft").length;
+  const totalActive = products.filter((p) => p.status === "active").length;
+  const totalDraft = products.filter((p) => p.status === "draft").length;
   const totalArchived = products.filter((p) => p.status === "archived").length;
 
   return (
@@ -130,10 +130,10 @@ export default function AllProductsPage() {
       {pagination && (
         <div className="grid grid-cols-4 gap-3">
           {[
-            { label: "Total",    value: pagination.total, color: "text-white"        },
-            { label: "Active",   value: totalActive,      color: "text-emerald-400"  },
-            { label: "Draft",    value: totalDraft,       color: "text-zinc-400"     },
-            { label: "Archived", value: totalArchived,    color: "text-amber-400"    },
+            { label: "Total", value: pagination.total, color: "text-white" },
+            { label: "Active", value: totalActive, color: "text-emerald-400" },
+            { label: "Draft", value: totalDraft, color: "text-zinc-400" },
+            { label: "Archived", value: totalArchived, color: "text-amber-400" },
           ].map((stat) => (
             <div key={stat.label} className="bg-[#13131a] border border-zinc-800/70 rounded-xl px-4 py-3">
               <p className="text-xs text-zinc-500 mb-1">{stat.label}</p>
@@ -220,8 +220,8 @@ export default function AllProductsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {products.map((product) => {
             const primaryImg = product.images?.find((i) => i.isPrimary) || product.images?.[0];
-            const status     = STATUS_CONFIG[product.status];
-            const tags       = product.tags?.split(",").map((t) => t.trim()).filter(Boolean) ?? [];
+            const status = STATUS_CONFIG[product.status];
+            const tags = product.tags?.split(",").map((t) => t.trim()).filter(Boolean) ?? [];
 
             return (
               <div
@@ -305,9 +305,6 @@ export default function AllProductsPage() {
 
                   {/* Price + date */}
                   <div className="flex items-center justify-between mt-auto pt-2 border-t border-zinc-800/60">
-                    <span className="text-base font-bold text-white">
-                      {product.price != null ? `£${Number(product.price).toFixed(2)}` : "—"}
-                    </span>
                     <span className="text-[10px] text-zinc-600">
                       {new Date(product.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
                     </span>
@@ -339,11 +336,10 @@ export default function AllProductsPage() {
                 <button
                   key={p}
                   onClick={() => setPage(p)}
-                  className={`w-8 h-8 rounded-lg text-sm font-medium transition-all ${
-                    p === page
+                  className={`w-8 h-8 rounded-lg text-sm font-medium transition-all ${p === page
                       ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/30"
                       : "border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500"
-                  }`}
+                    }`}
                 >
                   {p}
                 </button>

@@ -102,23 +102,6 @@ function ProductCard({ product }: { product: Product }) {
                         )}
                     </div>
                 )}
-
-                {/* Price + CTA */}
-                <div className="flex items-center justify-between pt-2 border-t border-white/[0.05] mt-auto">
-                    <div>
-                        {product.price != null ? (
-                            <span className="text-lg font-bold text-white">
-                                £{Number(product.price).toFixed(2)}
-                            </span>
-                        ) : (
-                            <span className="text-xs text-white/30 italic">Price on request</span>
-                        )}
-                    </div>
-                    <button className="flex items-center gap-1.5 text-xs font-semibold bg-white text-black px-3 py-1.5 rounded-lg hover:bg-white/90 active:scale-95 transition-all duration-150">
-                        <ShoppingCart className="w-3.5 h-3.5" />
-                        Enquire
-                    </button>
-                </div>
             </div>
         </div>
     );
