@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Archivo_Black } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 // const geistSans = Geist({
@@ -11,7 +12,6 @@ import "./globals.css";
 //   variable: "--font-geist-mono",
 //   subsets: ["latin"],
 // });
-
 const archivoBlack = Archivo_Black({
   weight: '400',
   subsets: ['latin'],
@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${archivoBlack.variable} antialiased`}
+        className={`antialiased font-mignon`}
       >
         {children}
       </body>
