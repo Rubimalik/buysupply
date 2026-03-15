@@ -1,5 +1,5 @@
 import DesktopNav from "./DesktopNavbar";
-import MobileNav from "./ui/MobileNavbar";
+import MobileNav from "./MobileNavbar";
 
 
 export default function NavBar() {
