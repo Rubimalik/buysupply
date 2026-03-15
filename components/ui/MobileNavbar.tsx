@@ -7,7 +7,7 @@ export default function MobileNav() {
       {/* LEFT — Phone */}
       <a
         href="tel:01753971125"
-        className="absolute left-3 flex items-center gap-1 text-xs text-white/60 hover:text-white transition"
+        className="absolute left-3 flex items-center gap-1 text-xs sm:text-sm text-white/60 hover:text-white transition"
       >
         <Phone size={14} className="shrink-0" />
         <span className="leading-none">01753971125</span>
@@ -16,7 +16,7 @@ export default function MobileNav() {
       {/* RIGHT — Email */}
       <a
         href="mailto:sales@buysupply.me"
-        className="absolute right-3 flex items-center gap-1 text-xs text-white/60 hover:text-white transition"
+        className="absolute right-3 flex items-center gap-1 text-xs sm:text-sm text-white/60 hover:text-white transition"
       >
         <Mail size={14} className="shrink-0" />
         <span className="leading-none">sales@buysupply.me</span>

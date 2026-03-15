@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 640);
@@ -111,19 +111,16 @@ export default function Home() {
           {/* Logo + About */}
           <div className="flex flex-col items-start">
             <div className="flex items-center gap-3 mb-4">
-              <div className="bg-black/20 flex items-center justify-center p-2">
+              <div className="bg-black/20 flex items-center justify-center sm:p-2 gap-2">
                 <Image
                   width={60}
-                  height={100}
-                  src={"/logo.png"}
+                  height={60}
+                  src={"/footer.svg"}
                   alt="My Store Logo"
                   className="w-full max-w-[150px] h-auto object-contain"
                 />
               </div>
             </div>
-            <p className="text-white/70 text-sm">
-
-            </p>
           </div>
 
           {/* Useful Links */}
