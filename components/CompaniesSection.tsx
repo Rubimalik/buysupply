@@ -1,6 +1,6 @@
 export default function UKSalesSection() {
     return (
-        <section className="py-20 bg-black border-t border-white/10 font-minion">
+        <section className="py-20 bg-black border-t border-white/10 font-myriad">
 
             <div className="max-w-5xl mx-auto px-6 text-white">
 
