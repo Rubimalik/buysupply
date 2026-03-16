@@ -6,15 +6,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+
 export default function Home() {
 
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 640);
+    handler();
     window.addEventListener("resize", handler);
     return () => window.removeEventListener("resize", handler);
   }, []);
+
+
+
   return (
     <div className="bg-black text-white min-h-screen font-myriad ">
 
@@ -54,13 +59,15 @@ export default function Home() {
           <h2 className="text-white font-semibold text-[15px] sm:text-[28px] md:text-[36px] mb-6 sm:mb-8 font-myriad">
             PRESS HERE FOR STOCK
           </h2>
-          <div style={{
-            display: "flex",
-            flexDirection: isMobile ? "column" : "row",
-            gap: isMobile ? "32px" : "64px",
-            alignItems: "center",
-            justifyContent: "center"
-          }}>
+          <div
+            suppressHydrationWarning
+            style={{
+              display: "flex",
+              flexDirection: isMobile ? "column" : "row",
+              gap: isMobile ? "32px" : "64px",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
 
             {/* Printers Button */}
             <div className="flex flex-col items-center gap-2">
