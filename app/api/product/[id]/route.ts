@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
-// GET /api/product/[id]
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -9,13 +8,15 @@ export async function GET(
   try {
     const { id } = await params;
     const productId = parseInt(id);
-
     if (isNaN(productId))
       return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
 
     const product = await prisma.product.findUnique({
       where: { id: productId },
-      include: { images: { orderBy: { isPrimary: "desc" } } },
+      include: {
+        images:   { orderBy: { isPrimary: "desc" } },
+        category: { select: { id: true, name: true, slug: true } },
+      },
     });
 
     if (!product)
@@ -28,7 +29,6 @@ export async function GET(
   }
 }
 
-// PUT /api/product/[id]
 export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -36,28 +36,25 @@ export async function PUT(
   try {
     const { id } = await params;
     const productId = parseInt(id);
-
     if (isNaN(productId))
       return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
 
     const body = await req.json();
-    const { name, description, price, status, tags, images } = body;
+    const { name, description, price, status, tags, categoryId, images } = body;
 
     const data: Record<string, unknown> = {};
-
     if (name        !== undefined) data.name        = name;
     if (description !== undefined) data.description = description || null;
     if (price       !== undefined) data.price       = price ?? null;
     if (status      !== undefined) data.status      = status;
     if (tags        !== undefined) data.tags        = tags || null;
+    if (categoryId  !== undefined) data.categoryId  = categoryId ?? null;
 
     if (images !== undefined) {
       data.images = {
         deleteMany: {},
         create: images.map((img: { url: string; key: string; isPrimary?: boolean }, i: number) => ({
-          url:       img.url,
-          key:       img.key,
-          isPrimary: img.isPrimary ?? i === 0,
+          url: img.url, key: img.key, isPrimary: img.isPrimary ?? i === 0,
         })),
       };
     }
@@ -65,7 +62,10 @@ export async function PUT(
     const product = await prisma.product.update({
       where: { id: productId },
       data:  data as never,
-      include: { images: { orderBy: { isPrimary: "desc" } } },
+      include: {
+        images:   { orderBy: { isPrimary: "desc" } },
+        category: { select: { id: true, name: true, slug: true } },
+      },
     });
 
     return NextResponse.json({ data: product, message: "Product updated successfully" });
@@ -75,7 +75,6 @@ export async function PUT(
   }
 }
 
-// DELETE /api/product/[id]
 export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -83,7 +82,6 @@ export async function DELETE(
   try {
     const { id } = await params;
     const productId = parseInt(id);
-
     if (isNaN(productId))
       return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
 
