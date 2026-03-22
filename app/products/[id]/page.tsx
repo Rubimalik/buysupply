@@ -14,13 +14,13 @@ interface Product {
 }
 
 export default function ProductDetailPage() {
-  const { id }   = useParams<{ id: string }>();
-  const router   = useRouter();
-  const [product, setProduct]       = useState<Product | null>(null);
-  const [loading, setLoading]       = useState(true);
-  const [error, setError]           = useState("");
-  const [activeImg, setActiveImg]   = useState(0);
-  const [lightbox, setLightbox]     = useState(false);
+  const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [activeImg, setActiveImg] = useState(0);
+  const [lightbox, setLightbox] = useState(false);
 
   useEffect(() => {
     fetch(`/api/product/${id}`)
@@ -38,8 +38,8 @@ export default function ProductDetailPage() {
     if (!lightbox || !product) return;
     const handler = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") setActiveImg((i) => (i + 1) % product.images.length);
-      if (e.key === "ArrowLeft")  setActiveImg((i) => (i - 1 + product.images.length) % product.images.length);
-      if (e.key === "Escape")     setLightbox(false);
+      if (e.key === "ArrowLeft") setActiveImg((i) => (i - 1 + product.images.length) % product.images.length);
+      if (e.key === "Escape") setLightbox(false);
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
@@ -95,7 +95,7 @@ export default function ProductDetailPage() {
             >
               {currentImg ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={currentImg.url} alt={product.name} className="w-full h-full object-cover" />
+                <img src={currentImg.url} alt={product.name} className="w-full h-full object-contain" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <ImageOff className="w-12 h-12 text-white/10" />
@@ -131,9 +131,8 @@ export default function ProductDetailPage() {
               <div className="flex gap-2 overflow-x-auto pb-1">
                 {images.map((img, i) => (
                   <button key={img.id} onClick={() => setActiveImg(i)}
-                    className={`relative shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${
-                      i === activeImg ? "border-white/60" : "border-transparent hover:border-white/20"
-                    }`}>
+                    className={`relative shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${i === activeImg ? "border-white/60" : "border-transparent hover:border-white/20"
+                      }`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={img.url} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
                   </button>
