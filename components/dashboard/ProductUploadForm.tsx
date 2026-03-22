@@ -161,7 +161,6 @@ export function ProductUploadForm() {
     { label: "Add product name",          done: !!watch("name") },
     { label: "Write a description",       done: descriptionValue.length >= 20 },
     { label: "Upload at least one image", done: watchedImages.length > 0 },
-    { label: "Set a price",               done: !!watch("price") },
     { label: "Choose a category",         done: !!watch("categoryId") },
   ];
 

@@ -75,10 +75,11 @@ export default function Home() {
                 Printers & Photocopiers
               </span>
               <Link
-                href="/products"
+                href="/products?category=photocopiers"
                 className="w-[62px] h-[62px] sm:w-[75px] sm:h-[75px] md:w-[85px] md:h-[85px] 
                  rounded-full transition-all duration-300 
                  hover:scale-105 active:scale-95 shadow-lg overflow-hidden"
+
               >
                 <img src="/button.png" alt="Printers & Copier" className="w-full h-full object-cover" />
               </Link>
@@ -91,7 +92,7 @@ export default function Home() {
                 Consumables
               </span>
               <Link
-                href="/products"
+                href="/products?category=consumables"
                 className="w-[62px] h-[62px] sm:w-[75px] sm:h-[75px] md:w-[85px] md:h-[85px] 
                  rounded-full transition-all duration-300 
                  hover:scale-105 active:scale-95 shadow-lg overflow-hidden"
