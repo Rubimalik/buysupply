@@ -176,7 +176,7 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
             <p className="text-sm font-medium text-zinc-300">
               {isUploading ? "Uploading..." : <>Drop images here or <span className="text-indigo-400">browse</span></>}
             </p>
-            <p className="text-xs text-zinc-600 mt-1">PNG, JPG, WEBP · Up to 4MB each · Max 8 images</p>
+            <p className="text-xs text-zinc-600 mt-1">PNG, JPG, WEBP · Up to 8MB each </p>
           </div>
         </div>
       </div>
@@ -216,6 +216,8 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
                   <p className="text-red-400 text-xs font-medium px-2 text-center">Upload failed</p>
                 </div>
               )}
+
+
 
               {/* Hover actions */}
               {img.status !== "uploading" && (
