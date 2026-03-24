@@ -10,13 +10,13 @@ import {
 } from "lucide-react";
 
 type ProductFormData = {
-  name:        string;
+  name: string;
   description: string;
-  price:       string;
-  status:      "draft" | "active" | "archived";
-  tags:        string;
-  categoryId:  string;
-  images:      UploadedImage[];
+  price: string;
+  status: "draft" | "active" | "archived";
+  tags: string;
+  categoryId: string;
+  images: UploadedImage[];
 };
 
 interface Category {
@@ -26,9 +26,9 @@ interface Category {
 }
 
 const statuses = [
-  { value: "draft",    label: "Draft",    desc: "Not visible to customers", dot: "bg-zinc-500"   },
-  { value: "active",   label: "Active",   desc: "Listed and available",     dot: "bg-emerald-500"},
-  { value: "archived", label: "Archived", desc: "Hidden from store",        dot: "bg-amber-500"  },
+  { value: "draft", label: "Draft", desc: "Not visible to customers", dot: "bg-zinc-500" },
+  { value: "active", label: "Active", desc: "Listed and available", dot: "bg-emerald-500" },
+  { value: "archived", label: "Archived", desc: "Hidden from store", dot: "bg-amber-500" },
 ] as const;
 
 function Field({ label, required, error, hint, children }: {
@@ -101,7 +101,7 @@ export function ProductUploadForm() {
   const router = useRouter();
   const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [submitError, setSubmitError] = useState("");
-  const [categories, setCategories]   = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const { register, handleSubmit, control, watch, formState: { errors } } = useForm<ProductFormData>({
     defaultValues: { status: "draft", images: [], categoryId: "" },
@@ -111,11 +111,11 @@ export function ProductUploadForm() {
     fetch("/api/category")
       .then((r) => r.json())
       .then((d) => setCategories(d.data || []))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const descriptionValue = watch("description") || "";
-  const watchedImages    = watch("images") || [];
+  const watchedImages = watch("images") || [];
 
   const onSubmit = async (data: ProductFormData) => {
     if (data.images.length === 0) {
@@ -126,13 +126,13 @@ export function ProductUploadForm() {
     setSubmitError("");
     try {
       const payload = {
-        name:        data.name,
+        name: data.name,
         description: data.description || undefined,
-        price:       data.price ? parseFloat(data.price) : null,
-        status:      data.status,
-        tags:        data.tags || undefined,
-        categoryId:  data.categoryId ? parseInt(data.categoryId) : null,
-        images:      data.images.map((img) => ({ url: img.url, key: img.key, isPrimary: img.isPrimary })),
+        price: data.price ? parseFloat(data.price) : null,
+        status: data.status,
+        tags: data.tags || undefined,
+        categoryId: data.categoryId ? parseInt(data.categoryId) : null,
+        images: data.images.map((img) => ({ url: img.url, key: img.key, isPrimary: img.isPrimary })),
       };
 
       const res = await fetch("/api/product", {
@@ -158,10 +158,10 @@ export function ProductUploadForm() {
   const isSuccess = submitState === "success";
 
   const checklist = [
-    { label: "Add product name",          done: !!watch("name") },
-    { label: "Write a description",       done: descriptionValue.length >= 20 },
+    { label: "Add product name", done: !!watch("name") },
+    { label: "Write a description", done: descriptionValue.length >= 20 },
     { label: "Upload at least one image", done: watchedImages.length > 0 },
-    { label: "Choose a category",         done: !!watch("categoryId") },
+    { label: "Choose a category", done: !!watch("categoryId") },
   ];
 
   return (
@@ -202,7 +202,25 @@ export function ProductUploadForm() {
 
         {/* Right column */}
         <div className="space-y-5">
-
+          {/* Pricing */}
+          <Card title="Pricing" icon={DollarSign}>
+            <div className="max-w-xs">
+              <Field label="Price" error={errors.price?.message}>
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  prefix="£"
+                  placeholder="0.00"
+                  error={!!errors.price}
+                  {...register("price", {
+                    min: { value: 0, message: "Price must be positive" },
+                  })}
+                />
+              </Field>
+              <p className="text-xs text-zinc-600 mt-2">Leave empty to show &quot;Price on application&quot;</p>
+            </div>
+          </Card>
           {/* Category */}
           <Card title="Category" icon={Tag}>
             <Field label="Category" required error={errors.categoryId?.message}>

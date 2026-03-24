@@ -302,9 +302,14 @@ export default function AllProductsPage() {
                       )}
                     </div>
                   )}
-
                   {/* Price + date */}
                   <div className="flex items-center justify-between mt-auto pt-2 border-t border-zinc-800/60">
+                    <span className="text-sm font-bold text-white">
+                      {product.price != null
+                        ? `£${Number(product.price).toFixed(2)}`
+                        : <span className="text-xs font-normal text-zinc-500 italic">POA</span>
+                      }
+                    </span>
                     <span className="text-[10px] text-zinc-600">
                       {new Date(product.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
                     </span>
@@ -337,8 +342,8 @@ export default function AllProductsPage() {
                   key={p}
                   onClick={() => setPage(p)}
                   className={`w-8 h-8 rounded-lg text-sm font-medium transition-all ${p === page
-                      ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/30"
-                      : "border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500"
+                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/30"
+                    : "border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500"
                     }`}
                 >
                   {p}

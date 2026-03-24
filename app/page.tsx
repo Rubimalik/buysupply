@@ -44,8 +44,8 @@ export default function Home() {
 
         {/* Tagline */}
         <p className="mt-2 text-[16px] sm:text-[22px] md:text-[28px] font-semibold text-white leading-snug sm:leading-normal max-w-[90%] sm:max-w-[720px] font-myriad">
-          Buying & Supplying in the Office Industry <br />
-          Since 2001
+        Quality Used Copiers, Delivered Nationwide
+
         </p>
 
         {/* Description */}
@@ -144,6 +144,7 @@ export default function Home() {
           <div>
             <h3 className="font-semibold mb-3">Contact Us</h3>
             <p className="text-white/70 text-sm"> Sales@buysupply.me</p>
+            <p className="text-white/70 text-sm mt-0.5">01753971125</p>
             <div className="flex gap-3 mt-2">
               {/* Replace with social icons later if needed */}
             </div>

@@ -349,6 +349,27 @@ export default function ProductEditPage() {
 
                     {/* Pricing + Category */}
                     <div className="grid grid-cols-1  gap-5">
+                        {/* Price */}
+                        <div className="bg-[#13131a] border border-zinc-800/70 rounded-2xl overflow-hidden">
+                            <div className="flex items-center gap-2.5 px-5 py-4 border-b border-zinc-800/70">
+                                <div className="w-7 h-7 rounded-lg bg-zinc-800 flex items-center justify-center">
+                                    <DollarSign className="w-3.5 h-3.5 text-zinc-400" />
+                                </div>
+                                <h2 className="text-sm font-semibold text-zinc-200">Price</h2>
+                            </div>
+                            <div className="p-5">
+                                <div className="relative">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-zinc-500">£</span>
+                                    <input
+                                        type="number" step="0.01" min="0"
+                                        value={price} onChange={(e) => setPrice(e.target.value)}
+                                        placeholder="0.00"
+                                        className="w-full bg-zinc-900/60 border border-zinc-700/60 text-sm text-zinc-200 placeholder:text-zinc-600 rounded-lg pl-7 pr-3 py-2.5 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/20 hover:border-zinc-600 transition-all"
+                                    />
+                                </div>
+                                <p className="text-xs text-zinc-600 mt-2">Leave empty for &quot;Price on application&quot;</p>
+                            </div>
+                        </div>
                         {/* Category */}
                         <div className="bg-[#13131a] border border-zinc-800/70 rounded-2xl overflow-hidden">
                             <div className="flex items-center gap-2.5 px-5 py-4 border-b border-zinc-800/70">
