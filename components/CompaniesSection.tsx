@@ -10,7 +10,7 @@ export default function UKSalesSection() {
                 </h2>
 
                 <h3 className="text-2xl font-semibold mb-6">
-                    Buy Supply – Quality Used Copiers, Delivered Nationwide
+                    BuySupply – Quality Used Copiers, Delivered Nationwide
                 </h3>
 
                 <p className="text-white/70 leading-relaxed mb-10">

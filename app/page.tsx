@@ -44,7 +44,8 @@ export default function Home() {
 
         {/* Tagline */}
         <p className="mt-2 text-[16px] sm:text-[22px] md:text-[28px] font-semibold text-white leading-snug sm:leading-normal max-w-[90%] sm:max-w-[720px] font-myriad">
-        Quality Used Copiers, Delivered Nationwide
+          Buying & Supplying in the Office Industry
+          Since 2001
 
         </p>
 
