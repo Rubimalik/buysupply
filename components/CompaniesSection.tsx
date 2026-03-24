@@ -14,7 +14,7 @@ export default function UKSalesSection() {
                 </h3>
 
                 <p className="text-white/70 leading-relaxed mb-10">
-                    At Buy Supply, we specialise in supplying high-quality used copiers to dealers across the UK.
+                    At BuySupply, we specialise in supplying high-quality used copiers to dealers across the UK.
                     With extensive stock available for immediate dispatch, we help you secure the right machines
                     quickly, efficiently, and with complete confidence.
                 </p>
