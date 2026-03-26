@@ -1,21 +1,58 @@
-import { Phone, Mail } from "lucide-react"
+import Link from "next/link"
+
+const navLinks = [
+    { label: "UK Sales", href: "#uk-sales" },
+    { label: "Export Sales", href: "#export-sales" },
+    { label: "Leasing", href: "#leasing" },
+    { label: "Collection & Storage", href: "#collection-storage" },
+    { label: "Sell Your Copier", href: "#sell-your-copier" },
+]
 
 export default function DesktopNav() {
-  return (
-    <div className="hidden md:flex items-center justify-between w-full bg-black px-[40px]" style={{ height: "30px" }}>
+    return (
+        <nav className="w-full flex items-center justify-between">
 
-      {/* LEFT — Phone */}
-      <div className="flex items-center gap-[12px] text-white/70 text-[16px] hover:text-white transition duration-300">
-        <Phone size={28} />
-        <a href="tel:01753971125">01753971125</a>
-      </div>
+            {/* Logo */}
+            <Link
+                href="/"
+                className="text-white font-bold tracking-wide shrink-0 transition-opacity duration-300 hover:opacity-80"
+                style={{ fontSize: "clamp(14px, 2vw, 18px)" }}
+            >
+                BuySupply
+            </Link>
 
-      {/* RIGHT — Email */}
-      <div className="flex items-center gap-[12px] text-white/70 text-[16px] hover:text-white transition duration-300">
-        <Mail size={28} />
-        <a href="mailto:sales@buysupply.me">sales@buysupply.me</a>
-      </div>
+            {/* Nav Links */}
+            <ul className="flex items-center gap-5 lg:gap-8 flex-1 justify-center">
+                {navLinks.map((link) => (
+                    <li key={link.href}>
+                        <Link
+                            href={link.href}
+                            className="relative text-white/60 hover:text-white whitespace-nowrap
+                                       transition-colors duration-300
+                                       after:absolute after:left-0 after:-bottom-0.5
+                                       after:h-px after:w-0 after:bg-white
+                                       after:transition-[width] after:duration-300
+                                       hover:after:w-full"
+                            style={{ fontSize: "clamp(11px, 1.2vw, 14px)" }}
+                        >
+                            {link.label}
+                        </Link>
+                    </li>
+                ))}
+            </ul>
 
-    </div>
-  )
+            {/* CTA */}
+            <Link
+                href="mailto:sales@buysupply.me"
+                className="shrink-0 bg-white text-black font-semibold px-4 py-2 rounded
+                           transition-all duration-300
+                           hover:bg-white/90 hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]
+                           hover:scale-[1.03] active:scale-95"
+                style={{ fontSize: "clamp(11px, 1.2vw, 14px)" }}
+            >
+                Get a Quote
+            </Link>
+
+        </nav>
+    )
 }

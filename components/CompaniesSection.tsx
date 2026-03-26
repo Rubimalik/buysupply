@@ -1,3 +1,5 @@
+import SellForm from "./Sellform";
+
 export default function UKSalesSection() {
     return (
         <section className="py-20 bg-black border-t border-white/10 font-myriad">
@@ -5,84 +7,74 @@ export default function UKSalesSection() {
             <div className="max-w-5xl mx-auto px-6 text-white">
 
                 {/* ================= UK SALES ================= */}
-                <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
-                    UK SALES
-                </h2>
+                <div id="uk-sales" className="scroll-mt-24">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
+                        UK SALES
+                    </h2>
 
-                <h3 className="text-2xl font-semibold mb-6">
-                    BuySupply – Quality Used Copiers, Delivered Nationwide
-                </h3>
+                    <h3 className="text-2xl font-semibold mb-6">
+                        BuySupply – Quality Used Copiers, Delivered Nationwide
+                    </h3>
 
-                <p className="text-white/70 leading-relaxed mb-10">
-                    At BuySupply, we specialise in supplying high-quality used copiers to dealers across the UK.
-                    With extensive stock available for immediate dispatch, we help you secure the right machines
-                    quickly, efficiently, and with complete confidence.
-                </p>
+                    <p className="text-white/70 leading-relaxed mb-10">
+                        At BuySupply, we specialise in supplying high-quality used copiers to dealers across the UK.
+                        With extensive stock available for immediate dispatch, we help you secure the right machines
+                        quickly, efficiently, and with complete confidence.
+                    </p>
 
-                <h4 className="text-xl font-semibold mb-4">
-                    Industry Expertise You Can Rely On
-                </h4>
+                    <h4 className="text-xl font-semibold mb-4">
+                        Industry Expertise You Can Rely On
+                    </h4>
 
-                <p className="text-white/70 leading-relaxed mb-6">
-                    Our UK Sales Team is made up of experienced used copier specialists who understand the market inside and out.
-                    We work hard to stay ahead of model updates, product variations, and dealer demand — giving you informed,
-                    practical guidance when selecting the right machines for your customers.
-                </p>
+                    <p className="text-white/70 leading-relaxed mb-6">
+                        Our UK Sales Team is made up of experienced used copier specialists who understand the market inside and out.
+                        We work hard to stay ahead of model updates, product variations, and dealer demand — giving you informed,
+                        practical guidance when selecting the right machines for your customers.
+                    </p>
 
-                <p className="text-white/70 leading-relaxed mb-10">
-                    Whether you need a single unit or multiple machines, our team is here to support you from
-                    initial enquiry through to delivery.
-                </p>
+                    <p className="text-white/70 leading-relaxed mb-10">
+                        Whether you need a single unit or multiple machines, our team is here to support you from
+                        initial enquiry through to delivery.
+                    </p>
 
-                <h4 className="text-xl font-semibold mb-4">
-                    Stock from Leading Manufacturers
-                </h4>
+                    <h4 className="text-xl font-semibold mb-4">
+                        Stock from Leading Manufacturers
+                    </h4>
 
-                <ul className="list-disc list-inside text-white/70 space-y-2 mb-6">
-                    <li>Canon</li>
-                    <li>Ricoh</li>
-                    <li>Konica Minolta</li>
-                    <li>And other leading manufacturers</li>
-                </ul>
+                    <ul className="list-disc list-inside text-white/70 space-y-2 mb-6">
+                        <li>Canon</li>
+                        <li>Ricoh</li>
+                        <li>Konica Minolta</li>
+                        <li>And other leading manufacturers</li>
+                    </ul>
 
-                <ul className="list-disc list-inside text-white/70 space-y-2 mb-10">
-                    <li>Thoroughly cleaned and tested by our in-house engineers</li>
-                    <li>Professionally prepared prior to dispatch</li>
-                    <li>Supplied with securely cleansed HDDs where required</li>
-                </ul>
+                    <ul className="list-disc list-inside text-white/70 space-y-2 mb-10">
+                        <li>Thoroughly cleaned and tested by our in-house engineers</li>
+                        <li>Professionally prepared prior to dispatch</li>
+                        <li>Supplied with securely cleansed HDDs where required</li>
+                    </ul>
 
-                <h4 className="text-xl font-semibold mb-4">
-                    Safe, Secure & Reliable Delivery
-                </h4>
+                    <h4 className="text-xl font-semibold mb-4">
+                        Safe, Secure & Reliable Delivery
+                    </h4>
 
-                <p className="text-white/70 leading-relaxed mb-10">
-                    Once your order is placed, your machine is individually wrapped and carefully prepared for transport.
-                    Delivery is managed professionally to ensure your equipment arrives safely, securely, and ready for installation.
-                </p>
+                    <p className="text-white/70 leading-relaxed mb-10">
+                        Once your order is placed, your machine is individually wrapped and carefully prepared for transport.
+                        Delivery is managed professionally to ensure your equipment arrives safely, securely, and ready for installation.
+                    </p>
 
-                <div className="space-y-8">
                     <p className="text-white/70 leading-relaxed">
                         From enquiry to arrival, your order is handled with care and attention to detail.
                     </p>
 
-                    <h4 className="text-xl font-semibold">
-                        Speak to the Team
-                    </h4>
-                    <p className="text-white/70 leading-relaxed mb-16">
-                        To enquire about current stock or place an order, contact our UK Sales Team:
-                    </p>
-                    <p className="text-white/70 leading-relaxed mb-16">
-                        <p className="text-white/70">📞 01753 971125</p>
-                        <p className="text-white/70 leading-relaxed mb-8">📧 Sales@buysupply.me</p>
-                    </p>
-                    <p className="text-white/70 leading-relaxed mb-16">
+                    <p className="text-white/70 leading-relaxed mt-6">
                         At BuySupply, we combine product knowledge, quality stock, and dependable service to help you keep your customers satisfied and your business moving forward.
                     </p>
 
-                </div>
+                </div>{/* end #uk-sales */}
 
                 {/* ================= EXPORT SALES ================= */}
-                <div className="border-t border-white/10 pt-16">
+                <div id="export-sales" className="border-t border-white/10 pt-16 scroll-mt-24">
 
                     <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
                         EXPORT SALES
@@ -170,19 +162,14 @@ export default function UKSalesSection() {
                         we would be pleased to work with you.
                     </p>
 
-                    <p className="text-white/70 leading-relaxed mb-6">
+                    <p className="text-white/70 leading-relaxed">
                         Get in touch today to discuss current stock and export opportunities.
                     </p>
-
-                    <div className="text-white/80 space-y-1" style={{ paddingBottom: '1px' }}>
-                        <p>📞 01753 971125</p>
-                        <p>📧 Sales@buysupply.me</p>
-                    </div>
 
                 </div>
 
                 {/* ================= LEASE RETURN SPECIALISTS ================= */}
-                <div className="border-t border-white/10 pt-16">
+                <div id="leasing" className="border-t border-white/10 pt-16 scroll-mt-24">
 
                     <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
                         LEASING
@@ -239,16 +226,13 @@ export default function UKSalesSection() {
 
                     <p className="text-white/70 leading-relaxed mb-6">
                         If you would like to explore how Buysupply can support your business,
-                        please contact us at:
+                        please get in touch with our team.
                     </p>
 
-                    <div className="text-white/80 space-y-2" style={{ paddingBottom: '1px' }}>
-                        <p>📞 01753 971125</p>
-                        <p>📧 Sales@buysupply.me</p>
-                    </div>
                 </div>
+
                 {/* ================= COLLECTION & STORAGE ================= */}
-                <div className="border-t border-white/10 pt-16">
+                <div id="collection-storage" className="border-t border-white/10 pt-16 scroll-mt-24">
 
                     <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
                         Collection & Storage
@@ -261,7 +245,7 @@ export default function UKSalesSection() {
                     </p>
 
                     <p className="text-white/70 leading-relaxed mb-10">
-                        Over the years we’ve built strong partnerships with specialist transport
+                        Over the years we've built strong partnerships with specialist transport
                         companies, allowing us to organise efficient, safe collections anywhere
                         in the country.
                     </p>
@@ -300,7 +284,7 @@ export default function UKSalesSection() {
                     </ul>
 
                     <p className="text-white/70 leading-relaxed mb-10">
-                        Whether it’s a single machine or multiple units, we can coordinate
+                        Whether it's a single machine or multiple units, we can coordinate
                         the collection and onward movement quickly and professionally.
                     </p>
 
@@ -322,7 +306,7 @@ export default function UKSalesSection() {
 
                     <p className="text-white/70 leading-relaxed mb-10">
                         Our storage solution gives you a safe and convenient place to hold
-                        equipment until it’s ready for its next destination.
+                        equipment until it's ready for its next destination.
                     </p>
 
                     <h4 className="text-xl font-semibold mb-4">
@@ -331,7 +315,7 @@ export default function UKSalesSection() {
 
                     <p className="text-white/70 leading-relaxed mb-8">
                         Our goal is to make collections, transport and storage as straightforward
-                        as possible. From the moment you contact us, we’ll arrange everything needed
+                        as possible. From the moment you contact us, we'll arrange everything needed
                         to ensure your equipment is handled professionally and efficiently.
                     </p>
 
@@ -340,6 +324,187 @@ export default function UKSalesSection() {
                     </p>
 
                 </div>
+
+                {/* ================= SELL YOUR PHOTOCOPIERS / PRINTERS & UNUSED TONERS ================= */}
+                <div id="sell-your-copier" className="border-t border-white/10 pt-16 scroll-mt-24">
+
+                    <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
+                        Sell Your Photocopiers / Printers & Unused Toners
+                    </h2>
+
+                    <h3 className="text-2xl font-semibold mb-6">
+                        Sell Your Used Photocopiers & Consumables UK – Fast Collection & Payment
+                    </h3>
+
+                    <p className="text-white/70 leading-relaxed mb-6">
+                        BuySupply is one of the UK's leading buyers of used photocopiers, printers,
+                        multifunction devices, wide format machines, and surplus consumables. If you're
+                        looking to sell your photocopier in the UK or sell toner cartridges for cash,
+                        we offer a fast, professional, and no-nonsense service.
+                    </p>
+
+                    <p className="text-white/70 leading-relaxed mb-10">
+                        We provide nationwide collection, top market prices, and fast payment, helping
+                        businesses across the UK turn surplus equipment into immediate cash.
+                    </p>
+
+                    <h4 className="text-xl font-semibold mb-4">
+                        We Buy Used Photocopiers – All Brands Wanted
+                    </h4>
+
+                    <p className="text-white/70 leading-relaxed mb-4">
+                        We purchase used photocopiers and printers across the UK every week,
+                        including all major brands:
+                    </p>
+
+                    <p className="text-white/70 leading-relaxed mb-6">
+                        Ricoh, Canon, Konica Minolta, Xerox, Toshiba, Sharp, Kyocera, Utax, and Develop.
+                    </p>
+
+                    <p className="text-white/70 leading-relaxed mb-10">
+                        Whether you want to sell a single copier, multiple machines, or complete an office
+                        equipment clearance, BuySupply is ready to buy immediately.
+                    </p>
+
+                    <h4 className="text-xl font-semibold mb-4">
+                        Sell Toner Cartridges & Printer Consumables UK
+                    </h4>
+
+                    <p className="text-white/70 leading-relaxed mb-4">
+                        Looking to sell surplus toner cartridges, ink, or printer parts? We are one of the
+                        UK's most active buyers of consumables, with strong demand from both UK and export markets.
+                    </p>
+
+                    <ul className="list-disc list-inside text-white/70 space-y-2 mb-10">
+                        <li>We buy new and original toner cartridges</li>
+                        <li>We accept large quantities and bulk stock</li>
+                        <li>From single boxes to pallets and lorry loads</li>
+                    </ul>
+
+                    <h4 className="text-xl font-semibold mb-4">
+                        Nationwide Copier Collection Service – Fast & Reliable
+                    </h4>
+
+                    <p className="text-white/70 leading-relaxed mb-4">
+                        We offer a UK-wide photocopier collection service using our own vehicles and experienced drivers.
+                    </p>
+
+                    <ul className="list-disc list-inside text-white/70 space-y-2 mb-10">
+                        <li>Fast, scheduled collections across the UK</li>
+                        <li>Single machines to full lorry loads</li>
+                        <li>Safe, professional handling of all equipment</li>
+                    </ul>
+
+                    <p className="text-white/70 leading-relaxed mb-10">
+                        No third parties. No delays. Just a reliable copier collection service you can trust.
+                    </p>
+
+                    <h4 className="text-xl font-semibold mb-4">
+                        Get the Best Price for Your Used Photocopier
+                    </h4>
+
+                    <p className="text-white/70 leading-relaxed mb-4">
+                        With strong demand across the UK and international export markets, we are able to
+                        offer competitive prices for used photocopiers and consumables.
+                    </p>
+
+                    <ul className="list-disc list-inside text-white/70 space-y-2 mb-10">
+                        <li>High demand = better prices</li>
+                        <li>Quick decisions and fast turnaround</li>
+                        <li>Regular purchasing from businesses nationwide</li>
+                    </ul>
+
+                    <p className="text-white/70 leading-relaxed mb-10">
+                        If you want the best price for your copier, we are actively buying now.
+                    </p>
+
+                    <h4 className="text-xl font-semibold mb-4">
+                        Professional Copier Processing & Resale
+                    </h4>
+
+                    <p className="text-white/70 leading-relaxed mb-4">
+                        All equipment is returned to our Slough facility for full processing:
+                    </p>
+
+                    <ul className="list-disc list-inside text-white/70 space-y-2 mb-10">
+                        <li>Fully tested and checked by trained technicians</li>
+                        <li>Logged and tracked with unique identification</li>
+                        <li>Prepared for fast resale to UK and export customers</li>
+                    </ul>
+
+                    <p className="text-white/70 leading-relaxed mb-10">
+                        This ensures your equipment is handled professionally and maximises resale value
+                        quickly and efficiently.
+                    </p>
+
+                    <h4 className="text-xl font-semibold mb-4">
+                        Sell Your Copier in 4 Simple Steps
+                    </h4>
+
+                    <p className="text-white/70 leading-relaxed mb-4">
+                        We make it easy to sell your photocopier or consumables in the UK:
+                    </p>
+
+                    <ol className="list-decimal list-inside text-white/70 space-y-2 mb-10">
+                        <li>Send us your machine details or stock list</li>
+                        <li>Receive a fast, competitive quote</li>
+                        <li>Arrange collection at your convenience</li>
+                        <li>Get paid quickly on receipt</li>
+                    </ol>
+
+                    <p className="text-white/70 leading-relaxed mb-10">
+                        A simple, proven process with no hassle and no wasted time.
+                    </p>
+
+                    <h4 className="text-xl font-semibold mb-4">
+                        Sell Your Surplus Equipment Today – Get Paid Fast
+                    </h4>
+
+                    <p className="text-white/70 leading-relaxed mb-6">
+                        If you have used photocopiers, printers, or surplus toner taking up space,
+                        don&lsquo;t let them sit idle. Sell your equipment today with BuySupply — fast
+                        collection, strong prices, and immediate value from a trusted UK buyer.
+                    </p>
+
+                    <p className="text-white/70 leading-relaxed">
+                        👉 Request a quote now or book your collection today
+                    </p>
+
+                </div>
+
+                <SellForm />
+
+
+                {/* ================= CONTACT ================= */}
+                <div className="border-t border-white/10 mt-16 pt-16 text-center">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
+                    <p className="text-white/60 mb-8">
+                        Ready to buy, sell, or partner with us? Contact our team today.
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-10">
+                        <a
+                            href="tel:01753971125"
+                            className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-6 py-4 transition group"
+                        >
+                            <span className="text-2xl">📞</span>
+                            <div className="text-left">
+                                <p className="text-white/40 text-xs uppercase tracking-widest mb-0.5">Phone</p>
+                                <p className="text-white font-semibold">01753 971125</p>
+                            </div>
+                        </a>
+                        <a
+                            href="mailto:Sales@buysupply.me"
+                            className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-6 py-4 transition group"
+                        >
+                            <span className="text-2xl">📧</span>
+                            <div className="text-left">
+                                <p className="text-white/40 text-xs uppercase tracking-widest mb-0.5">Email</p>
+                                <p className="text-white font-semibold">Sales@buysupply.me</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </section>
     );

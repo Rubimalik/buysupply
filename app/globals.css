@@ -148,3 +148,15 @@
     -webkit-backdrop-filter: blur(12px);
   }
 }
+/* Premium smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+ 
+/* Slightly slower, more premium feel for anchor navigation */
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+ 
