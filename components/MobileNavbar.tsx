@@ -75,7 +75,7 @@ export default function MobileNav() {
             {/* ── Dropdown with slide + fade ── */}
             {menuOpen && (
                 <div
-                    className="absolute top-full left-0 w-screen -mx-4 bg-black/95 backdrop-blur-sm border-t border-white/10 px-4 pb-5 z-50 overflow-hidden"
+                    className="absolute top-full left-0 w-full bg-black/95 backdrop-blur-sm border-t border-white/10 px-4 pb-5 z-50 overflow-hidden"
                     style={{
                         transition: "opacity 300ms ease, transform 300ms ease",
                         opacity: visible ? 1 : 0,
