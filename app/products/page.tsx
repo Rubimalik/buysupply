@@ -36,17 +36,17 @@ function ProductCard({ product }: { product: Product }) {
   return (
     <Link href={`/products/${product.id}`}
       className="group rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-zinc-600 transition-all duration-200 flex flex-col">
-      <div className="relative aspect-square overflow-hidden bg-zinc-800">
-        {primaryImg ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={primaryImg.url} alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <ImageOff className="w-8 h-8 text-zinc-700" />
-          </div>
-        )}
-      </div>
+      <div className="relative aspect-[4/3] overflow-hidden rounded-t-xl">
+  {primaryImg ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={primaryImg.url} alt={product.name}
+      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
+  ) : (
+    <div className="w-full h-full flex items-center justify-center bg-zinc-800">
+      <ImageOff className="w-8 h-8 text-zinc-700" />
+    </div>
+  )}
+</div>
       <div className="p-3 flex flex-col gap-1">
         <p className="text-sm text-white font-medium line-clamp-2 leading-snug">{product.name}</p>
         <p className="text-sm text-zinc-400">

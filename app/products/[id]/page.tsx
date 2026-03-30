@@ -172,19 +172,6 @@ export default function ProductDetailPage() {
                 <p className="text-sm text-white/70 leading-relaxed whitespace-pre-wrap">{product.description}</p>
               </div>
             )}
-
-            {/* Tags */}
-            {tags.length > 0 && (
-              <div className="flex items-center gap-2 flex-wrap">
-                <Tag className="w-3.5 h-3.5 text-white/25 shrink-0" />
-                {tags.map((tag) => (
-                  <span key={tag} className="text-xs text-white/40 bg-white/[0.05] border border-white/[0.06] px-2.5 py-1 rounded-full">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-
             {/* Meta */}
             <div className="flex items-center gap-1.5 text-xs text-white/25">
               <Calendar className="w-3.5 h-3.5" />

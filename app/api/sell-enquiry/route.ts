@@ -23,8 +23,8 @@ export async function POST(req: NextRequest) {
 
     // Send email notification to BuySupply team
     await resend.emails.send({
-      from: "BuySupply Enquiries <onboarding@resend.dev>", // must be a verified domain in Resend
-      to: "saleemsaba281@outlook.com",
+      from: "BuySupply Enquiries <noreply@buysupply.me>", // must be a verified domain in Resend
+      to: "sales@buysupply.me",
       replyTo: email,
       subject: `New Sell Enquiry from ${name}${company ? ` — ${company}` : ""}`,
       html: `
