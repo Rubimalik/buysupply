@@ -51,19 +51,19 @@ export const roboto = Roboto({
 export const metadata: Metadata = {
   // ── Basic ──────────────────────────────────────────────────────────────
   title: {
-    default: "BuySupply | Used Photocopiers & Printer Consumables UK",
+    default: "BuySupply | Photocopiers & Printer Consumables UK",
     template: "%s | BuySupply",
   },
   description:
-    "BuySupply specialises in high-quality used photocopiers, printers and consumables. UK-wide collection, fast delivery and competitive prices. Sell or buy copiers from Canon, Ricoh, Konica Minolta, Xerox and more.",
+    "BuySupply specialises in high-quality photocopiers, printers and consumables. UK-wide collection, fast delivery and competitive prices. Sell or buy copiers from Canon, Ricoh, Konica Minolta, Xerox and more.",
   keywords: [
-    "used photocopiers UK",
+    "photocopiers UK",
     "buy photocopier UK",
     "sell photocopier UK",
     "sell to us",
     "printer consumables UK",
     "toner cartridges UK",
-    "used copiers for sale",
+    "photocopiers for sale",
     "photocopier dealer UK",
     "Canon copier",
     "Ricoh copier",
@@ -89,15 +89,15 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: "https://buysupply.me",
     siteName: "BuySupply",
-    title: "BuySupply | Used Photocopiers & Printer Consumables UK",
+    title: "BuySupply | Photocopiers & Printer Consumables UK",
     description:
-      "UK's leading supplier of used photocopiers and printer consumables. Buy, sell or recycle — nationwide collection, fast delivery, competitive prices.",
+      "UK's leading supplier of photocopiers and printer consumables. Buy, sell or recycle — nationwide collection, fast delivery, competitive prices.",
     images: [
       {
         url: "/logo.png",   // add a 1200x630 image to your /public folder
         width: 1200,
         height: 630,
-        alt: "BuySupply – Used Photocopiers & Consumables UK",
+        alt: "BuySupply – Photocopiers & Consumables UK",
       },
     ],
   },
@@ -105,9 +105,9 @@ export const metadata: Metadata = {
   // ── Twitter / X card ───────────────────────────────────────────────────
   twitter: {
     card: "summary_large_image",
-    title: "BuySupply | Used Photocopiers & Printer Consumables UK",
+    title: "BuySupply | Photocopiers & Printer Consumables UK",
     description:
-      "Buy or sell used photocopiers and printer consumables across the UK. Canon, Ricoh, Konica Minolta, Xerox and more.",
+      "Buy or sell photocopiers and printer consumables across the UK. Canon, Ricoh, Konica Minolta, Xerox and more.",
     images: ["/logo.png"],
   },
  
