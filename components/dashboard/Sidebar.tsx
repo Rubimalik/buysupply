@@ -42,10 +42,6 @@ const navItems: NavItem[] = [
   },
 ];
 
-const bottomItems = [
-  { label: "Settings", href: "/dashboard/settings", icon: Settings },
-];
-
 export function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
@@ -179,38 +175,6 @@ export function Sidebar() {
             );
           })}
         </ul>
-
-        <div className="mt-6">
-          {!collapsed && (
-            <p className="text-[10px] uppercase tracking-widest text-zinc-600 font-medium px-2 mb-2">
-              System
-            </p>
-          )}
-          <ul className="space-y-0.5">
-            {bottomItems.map((item) => {
-              const Icon = item.icon;
-              const active = isActive(item.href);
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    title={collapsed ? item.label : undefined}
-                    className={`flex items-center gap-3 rounded-lg text-sm transition-all ${collapsed ? "justify-center px-2 py-2" : "px-3 py-2"
-                      } ${active
-                        ? "bg-indigo-500/15 text-indigo-400"
-                        : "text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50"
-                      }`}
-                  >
-                    <Icon className="w-4 h-4 shrink-0" />
-                    {!collapsed && (
-                      <span className="font-medium">{item.label}</span>
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
       </nav>
 
       {/* User Profile */}
