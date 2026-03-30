@@ -1,6 +1,7 @@
 
 import localFont from "next/font/local";
 import { Roboto } from "next/font/google";
+import { Metadata } from "next";
 import "./globals.css";
 
 const myriadPro = localFont({
@@ -44,6 +45,97 @@ export const roboto = Roboto({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-roboto", // optional CSS variable
 });
+
+
+
+export const metadata: Metadata = {
+  // ── Basic ──────────────────────────────────────────────────────────────
+  title: {
+    default: "BuySupply | Used Photocopiers & Printer Consumables UK",
+    template: "%s | BuySupply",
+  },
+  description:
+    "BuySupply specialises in high-quality used photocopiers, printers and consumables. UK-wide collection, fast delivery and competitive prices. Sell or buy copiers from Canon, Ricoh, Konica Minolta, Xerox and more.",
+  keywords: [
+    "used photocopiers UK",
+    "buy photocopier UK",
+    "sell photocopier UK",
+    "sell to us",
+    "printer consumables UK",
+    "toner cartridges UK",
+    "used copiers for sale",
+    "photocopier dealer UK",
+    "Canon copier",
+    "Ricoh copier",
+    "Konica Minolta",
+    "Xerox printer",
+    "lease return copiers",
+    "export photocopiers",
+    "BuySupply",
+  ],
+  authors: [{ name: "BuySupply", url: "https://buysupply.me" }],
+  creator: "BuySupply",
+  publisher: "BuySupply",
+ 
+  // ── Canonical URL ───────────────────────────────────────────────────────
+  metadataBase: new URL("https://buysupply.me"),
+  alternates: {
+    canonical: "/",
+  },
+ 
+  // ── Open Graph (Facebook, LinkedIn, WhatsApp previews) ──────────────────
+  openGraph: {
+    type: "website",
+    locale: "en_GB",
+    url: "https://buysupply.me",
+    siteName: "BuySupply",
+    title: "BuySupply | Used Photocopiers & Printer Consumables UK",
+    description:
+      "UK's leading supplier of used photocopiers and printer consumables. Buy, sell or recycle — nationwide collection, fast delivery, competitive prices.",
+    images: [
+      {
+        url: "/logo.png",   // add a 1200x630 image to your /public folder
+        width: 1200,
+        height: 630,
+        alt: "BuySupply – Used Photocopiers & Consumables UK",
+      },
+    ],
+  },
+ 
+  // ── Twitter / X card ───────────────────────────────────────────────────
+  twitter: {
+    card: "summary_large_image",
+    title: "BuySupply | Used Photocopiers & Printer Consumables UK",
+    description:
+      "Buy or sell used photocopiers and printer consumables across the UK. Canon, Ricoh, Konica Minolta, Xerox and more.",
+    images: ["/logo.png"],
+  },
+ 
+  // ── Robots ─────────────────────────────────────────────────────────────
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+ 
+  // ── Icons ──────────────────────────────────────────────────────────────
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
+ 
+  // ── Verification (add these when you set up Google Search Console) ─────
+  // verification: {
+  //   google: "your-google-verification-code",
+  // },
+};
 export default function RootLayout({
   children,
 }: Readonly<{

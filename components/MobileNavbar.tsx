@@ -9,7 +9,7 @@ const navLinks = [
     { label: "Export Sales", href: "#export-sales" },
     { label: "Leasing", href: "#leasing" },
     { label: "Collection & Storage", href: "#collection-storage" },
-    { label: "Sell Your Copier", href: "#sell-your-copier" },
+    { label: "Sell To Us", href: "#sell-your-copier" },
 ]
 
 export default function MobileNav() {
