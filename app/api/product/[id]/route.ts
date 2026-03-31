@@ -40,11 +40,12 @@ export async function PUT(
       return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
 
     const body = await req.json();
-    const { name, description, price, status, tags, categoryId, images } = body;
+    const { name, description, url, price, status, tags, categoryId, images } = body;
 
     const data: Record<string, unknown> = {};
     if (name        !== undefined) data.name        = name;
     if (description !== undefined) data.description = description || null;
+    if (url         !== undefined) data.url         = url || null;
     if (price       !== undefined) data.price       = price ?? null;
     if (status      !== undefined) data.status      = status;
     if (tags        !== undefined) data.tags        = tags || null;

@@ -5,6 +5,7 @@ import { z } from "zod";
 const createProductSchema = z.object({
   name:        z.string().min(3),
   description: z.string().optional(),
+  url:         z.string().url().optional().or(z.literal("")),
   price:       z.coerce.number().min(0).optional().nullable(),
   status:      z.enum(["draft", "active", "archived"]).default("draft"),
   tags:        z.string().optional(),
@@ -70,12 +71,13 @@ export async function POST(req: NextRequest) {
     if (!parsed.success)
       return NextResponse.json({ error: "Validation failed", details: parsed.error.flatten() }, { status: 400 });
 
-    const { name, description, price, status, tags, categoryId, images } = parsed.data;
+    const { name, description, url, price, status, tags, categoryId, images } = parsed.data;
 
     const product = await prisma.product.create({
       data: {
         name,
         description: description || null,
+        url:         url || null,
         price:       price ?? null,
         status,
         tags:        tags || null,

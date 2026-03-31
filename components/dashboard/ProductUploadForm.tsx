@@ -6,12 +6,13 @@ import { useRouter } from "next/navigation";
 import { ImageUpload, type UploadedImage } from "./ImageUpload";
 import {
   Package, DollarSign, Layers, Info, AlertCircle,
-  ChevronDown, Loader2, CheckCircle2, Tag,
+  ChevronDown, Loader2, CheckCircle2, Tag, Link2,
 } from "lucide-react";
 
 type ProductFormData = {
   name: string;
   description: string;
+  url: string;
   price: string;
   status: "draft" | "active" | "archived";
   tags: string;
@@ -128,6 +129,7 @@ export function ProductUploadForm() {
       const payload = {
         name: data.name,
         description: data.description || undefined,
+        url: data.url || undefined,
         price: data.price ? parseFloat(data.price) : null,
         status: data.status,
         tags: data.tags || undefined,
@@ -182,6 +184,10 @@ export function ProductUploadForm() {
                     error={!!errors.description} {...register("description")} />
                   <span className="absolute bottom-2.5 right-3 text-[10px] text-zinc-600">{descriptionValue.length} chars</span>
                 </div>
+              </Field>
+              <Field label="Product URL" hint="External link for more info about this product" error={errors.url?.message}>
+                <Input icon={Link2} placeholder="https://example.com/product-page" error={!!errors.url}
+                  {...register("url", { validate: (v) => !v || /^https?:\/\/.+/.test(v) || "Enter a valid URL starting with http:// or https://" })} />
               </Field>
               <Field label="Tags" hint="Comma-separated keywords">
                 <Input placeholder="laser, colour, a3, refurbished..." {...register("tags")} />

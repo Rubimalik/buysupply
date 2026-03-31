@@ -5,14 +5,14 @@ import { useParams, useRouter } from "next/navigation";
 import {
     ChevronLeft, Loader2, Save, CheckCircle2, AlertCircle,
     ImageOff, Tag, Calendar, Package, Layers, DollarSign,
-    Trash2, ExternalLink, ChevronLeft as Prev, ChevronRight as Next,
+    Trash2, ExternalLink, ChevronLeft as Prev, ChevronRight as Next, Link2,
 } from "lucide-react";
 
 interface ProductImage { id: number; url: string; isPrimary: boolean; }
 interface Category { id: number; name: string; slug: string; }
 interface Product {
     id: number; name: string; description: string | null;
-    price: number | null; status: string; tags: string | null;
+    url: string | null; price: number | null; status: string; tags: string | null;
     categoryId: number | null; createdAt: string; updatedAt: string;
     images: ProductImage[]; category: Category | null;
 }
@@ -42,6 +42,7 @@ export default function ProductEditPage() {
     const [price, setPrice] = useState("");
     const [status, setStatus] = useState("draft");
     const [tags, setTags] = useState("");
+    const [url, setUrl] = useState("");
     const [categoryId, setCategoryId] = useState("");
 
     useEffect(() => {
@@ -57,6 +58,7 @@ export default function ProductEditPage() {
             setPrice(p.price != null ? String(p.price) : "");
             setStatus(p.status);
             setTags(p.tags || "");
+            setUrl(p.url || "");
             setCategoryId(p.categoryId ? String(p.categoryId) : "");
             setCategories(cData.data || []);
         }).catch((e) => setError(e.message))
@@ -73,6 +75,7 @@ export default function ProductEditPage() {
                 body: JSON.stringify({
                     name,
                     description: description || null,
+                    url: url || null,
                     price: price ? parseFloat(price) : null,
                     status,
                     tags: tags || null,
@@ -106,6 +109,7 @@ export default function ProductEditPage() {
     const isDirty = product && (
         name !== product.name ||
         description !== (product.description || "") ||
+        url !== (product.url || "") ||
         price !== (product.price != null ? String(product.price) : "") ||
         status !== product.status ||
         tags !== (product.tags || "") ||
@@ -327,6 +331,22 @@ export default function ProductEditPage() {
                                 </div>
                             </div>
 
+                            {/* URL */}
+                            <div className="space-y-1.5">
+                                <label className="text-sm font-medium text-zinc-300 flex items-center gap-1.5">
+                                    <Link2 className="w-3.5 h-3.5 text-zinc-500" />Product URL
+                                    <span className="text-zinc-600 font-normal">(external link)</span>
+                                </label>
+                                <input value={url} onChange={(e) => setUrl(e.target.value)}
+                                    placeholder="https://example.com/product-page"
+                                    className="w-full bg-zinc-900/60 border border-zinc-700/60 text-sm text-zinc-200 placeholder:text-zinc-600 rounded-lg px-3 py-2.5 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/20 hover:border-zinc-600 transition-all" />
+                                {url && (
+                                    <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition-colors">
+                                        <ExternalLink className="w-3 h-3" />Preview link
+                                    </a>
+                                )}
+                            </div>
+
                             {/* Tags */}
                             <div className="space-y-1.5">
                                 <label className="text-sm font-medium text-zinc-300 flex items-center gap-1.5">
@@ -400,6 +420,7 @@ export default function ProductEditPage() {
                             <div className="flex gap-2">
                                 <button onClick={() => {
                                     setName(product.name); setDescription(product.description || "");
+                                    setUrl(product.url || "");
                                     setPrice(product.price != null ? String(product.price) : "");
                                     setStatus(product.status); setTags(product.tags || "");
                                     setCategoryId(product.categoryId ? String(product.categoryId) : "");

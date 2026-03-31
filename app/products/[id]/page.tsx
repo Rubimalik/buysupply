@@ -2,15 +2,34 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight, PhoneCall, Mail, ImageOff, Loader2, Tag, Calendar } from "lucide-react";
+import { ChevronLeft, ChevronRight, PhoneCall, Mail, ImageOff, Loader2, Tag, Calendar, ExternalLink } from "lucide-react";
 
 interface ProductImage { id: number; url: string; isPrimary: boolean; }
 interface Category { id: number; name: string; slug: string; }
 interface Product {
   id: number; name: string; description: string | null;
-  price: number | null; tags: string | null; status: string;
+  url: string | null; price: number | null; tags: string | null; status: string;
   createdAt: string; images: ProductImage[];
   category: Category | null;
+}
+
+function RichText({ text }: { text: string }) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = text.split(urlRegex);
+  return (
+    <>
+      {parts.map((part, i) =>
+        urlRegex.test(part) ? (
+          <a key={i} href={part} target="_blank" rel="noopener noreferrer"
+            className="text-indigo-400 hover:text-indigo-300 underline underline-offset-2 break-all transition-colors">
+            {part}
+          </a>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
 }
 
 export default function ProductDetailPage() {
@@ -169,8 +188,20 @@ export default function ProductDetailPage() {
             {product.description && (
               <div className="bg-white/[0.03] border border-white/[0.05] rounded-2xl p-5">
                 <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Description</h3>
-                <p className="text-sm text-white/70 leading-relaxed whitespace-pre-wrap">{product.description}</p>
+                <p className="text-sm text-white/70 leading-relaxed whitespace-pre-wrap"><RichText text={product.description} /></p>
               </div>
+            )}
+
+            {/* Product URL */}
+            {product.url && (
+              <a href={product.url} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-2.5 px-5 py-3.5 bg-white/[0.03] border border-white/[0.05] rounded-2xl hover:bg-white/[0.06] transition-colors group">
+                <ExternalLink className="w-4 h-4 text-indigo-400 shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-semibold text-white/40 uppercase tracking-widest">Product Link</p>
+                  <p className="text-sm text-indigo-400 group-hover:text-indigo-300 truncate transition-colors">{product.url}</p>
+                </div>
+              </a>
             )}
             {/* Meta */}
             <div className="flex items-center gap-1.5 text-xs text-white/25">
