@@ -36,7 +36,7 @@ function CustomDropdown({ id, name, required, placeholder, options, value, onCha
   const selected = options.find(o => o.value === value)
 
   return (
-    <div ref={ref} className="relative w-full">
+    <div ref={ref} className="relative w-full" >
       {/* Hidden native input for form submission */}
       <input type="hidden" id={id} name={name} value={value} required={required} />
 
@@ -181,7 +181,7 @@ export default function SellForm() {
   }
 
   return (
-    <div className="border-t border-white/10 mt-16 pt-16">
+    <div className="border-t border-white/10 mt-16 pt-16" id="sell-form">
       <h2 className="text-3xl md:text-4xl font-bold mb-3 text-center">
         Sell Your Equipment
       </h2>

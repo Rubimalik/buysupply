@@ -107,7 +107,7 @@ export default function MobileNav() {
 
                     {/* Mobile CTA */}
                     <Link
-                        href="mailto:sales@buysupply.me"
+                        href="#sell-form"
                         onClick={() => setMenuOpen(false)}
                         className="mt-4 flex items-center justify-center bg-white text-black font-semibold py-2.5 rounded
                                    transition-all duration-300 hover:bg-white/90 hover:scale-[1.02] active:scale-95 w-full"

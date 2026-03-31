@@ -43,7 +43,7 @@ export default function DesktopNav() {
 
             {/* CTA */}
             <Link
-                href="mailto:sales@buysupply.me"
+                href="#sell-form"
                 className="shrink-0 bg-white text-black font-semibold px-4 py-2 rounded
                            transition-all duration-300
                            hover:bg-white/90 hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]
