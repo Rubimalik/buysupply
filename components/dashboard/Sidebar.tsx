@@ -40,6 +40,11 @@ const navItems: NavItem[] = [
       { label: "Add New", href: "/dashboard/products/new", icon: PlusCircle },
     ],
   },
+  {
+    label: "Settings",
+    href: "/dashboard/settings",
+    icon: Settings,
+  },
 ];
 
 export function Sidebar() {

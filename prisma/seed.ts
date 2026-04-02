@@ -7,7 +7,7 @@ async function main() {
   await prisma.category.upsert({
     where:  { slug: "photocopiers" },
     update: {},
-    create: { name: "Photocopiers", slug: "phpotocopiers" },
+    create: { name: "Photocopiers", slug: "photocopiers" },
   });
   await prisma.category.upsert({
     where:  { slug: "consumables" },

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, PhoneCall, Mail, ImageOff, Loader2, Tag, Calendar, ExternalLink } from "lucide-react";
+import { HeicImage } from "@/components/HeicImage";
 
 interface ProductImage { id: number; url: string; isPrimary: boolean; }
 interface Category { id: number; name: string; slug: string; }
@@ -113,8 +114,7 @@ export default function ProductDetailPage() {
               onClick={() => images.length > 0 && setLightbox(true)}
             >
               {currentImg ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={currentImg.url} alt={product.name} className="w-full h-full object-contain" />
+                <HeicImage src={currentImg.url} alt={product.name} className="w-full h-full object-contain" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <ImageOff className="w-12 h-12 text-white/10" />
@@ -152,8 +152,7 @@ export default function ProductDetailPage() {
                   <button key={img.id} onClick={() => setActiveImg(i)}
                     className={`relative shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${i === activeImg ? "border-white/60" : "border-transparent hover:border-white/20"
                       }`}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={img.url} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+                    <HeicImage src={img.url} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -248,10 +247,10 @@ export default function ProductDetailPage() {
             </>
           )}
 
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={currentImg.url} alt={product.name}
-            className="max-h-[85vh] max-w-[90vw] object-contain rounded-xl"
-            onClick={(e) => e.stopPropagation()} />
+          <div onClick={(e) => e.stopPropagation()}>
+            <HeicImage src={currentImg.url} alt={product.name}
+              className="max-h-[85vh] max-w-[90vw] object-contain rounded-xl" />
+          </div>
 
           {images.length > 1 && (
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">

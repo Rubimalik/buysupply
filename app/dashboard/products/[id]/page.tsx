@@ -7,6 +7,7 @@ import {
     ImageOff, Tag, Calendar, Package, Layers, DollarSign,
     Trash2, ExternalLink, ChevronLeft as Prev, ChevronRight as Next, Link2,
 } from "lucide-react";
+import { HeicImage } from "@/components/HeicImage";
 
 interface ProductImage { id: number; url: string; isPrimary: boolean; }
 interface Category { id: number; name: string; slug: string; }
@@ -205,8 +206,7 @@ export default function ProductEditPage() {
                             {/* Main image */}
                             <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-zinc-900">
                                 {images[activeImg] ? (
-                                    // eslint-disable-next-line @next/next/no-img-element
-                                    <img src={images[activeImg].url} alt={product.name} className="w-full h-full object-cover" />
+                                    <HeicImage src={images[activeImg].url} alt={product.name} className="w-full h-full object-cover" />
                                 ) : (
                                     <div className="w-full h-full flex flex-col items-center justify-center gap-2">
                                         <ImageOff className="w-8 h-8 text-zinc-700" />
@@ -236,8 +236,7 @@ export default function ProductEditPage() {
                                     {images.map((img, i) => (
                                         <button key={img.id} onClick={() => setActiveImg(i)}
                                             className={`shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-all ${i === activeImg ? "border-indigo-500" : "border-zinc-700 hover:border-zinc-500"}`}>
-                                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                                            <img src={img.url} alt="" className="w-full h-full object-cover" />
+                                            <HeicImage src={img.url} alt="" className="w-full h-full object-cover" />
                                         </button>
                                     ))}
                                 </div>

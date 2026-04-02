@@ -48,7 +48,6 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
     [onChange]
   );
 
-  // ✅ Correct: useUploadThing hook — handles presign + S3 upload + CDN URL
   const { startUpload } = useUploadThing("productImageUploader", {
     onUploadError: (err) => {
       console.error("UploadThing error:", err.message);
@@ -69,20 +68,18 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
       setIsUploading(true);
 
       try {
-        // startUpload returns array of { url, ufsUrl, key, name, size, ... }
         const results = await startUpload(files);
 
         setPreviews((prev) => {
           const updated = prev.map((p) => {
             const newIdx = newPreviews.findIndex((np) => np.id === p.id);
-            if (newIdx === -1) return p; // not a new preview, skip
+            if (newIdx === -1) return p;
 
             const result = results?.[newIdx];
             if (result) {
               return {
                 ...p,
                 status: "success" as UploadStatus,
-                // ufsUrl is the permanent CDN URL in UploadThing v7
                 uploadedUrl: (result as any).ufsUrl ?? result.url,
                 uploadedKey: result.key,
               };
@@ -108,9 +105,43 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
     [previews.length, notify, startUpload]
   );
 
-  const handleFiles = (fileList: FileList | File[]) => {
-    const files = Array.from(fileList).filter((f) => f.type.startsWith("image/"));
-    if (files.length > 0) handleUpload(files);
+  // ✅ Dynamic import — only runs in browser, never on server
+  const convertHeicToJpeg = async (file: File): Promise<File> => {
+    const isHeic =
+      file.type === "image/heic" ||
+      file.type === "image/heif" ||
+      file.name.toLowerCase().endsWith(".heic") ||
+      file.name.toLowerCase().endsWith(".heif");
+
+    if (!isHeic) return file;
+
+    try {
+      const heic2any = (await import("heic2any")).default;
+      const blob = (await heic2any({
+        blob: file,
+        toType: "image/jpeg",
+        quality: 0.9,
+      })) as Blob;
+      const newName = file.name
+        .replace(/\.heic$/i, ".jpg")
+        .replace(/\.heif$/i, ".jpg");
+      return new File([blob], newName, { type: "image/jpeg" });
+    } catch (err) {
+      console.error("HEIC conversion failed:", err);
+      return file;
+    }
+  };
+
+  const handleFiles = async (fileList: FileList | File[]) => {
+    const raw = Array.from(fileList).filter(
+      (f) =>
+        f.type.startsWith("image/") ||
+        f.name.toLowerCase().endsWith(".heic") ||
+        f.name.toLowerCase().endsWith(".heif")
+    );
+    if (raw.length === 0) return;
+    const files = await Promise.all(raw.map(convertHeicToJpeg));
+    handleUpload(files);
   };
 
   const handleRemove = (id: string) => {
@@ -155,7 +186,7 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
         <input
           id="ut-image-input"
           type="file"
-          accept="image/*"
+          accept="image/*,.heic,.heif"
           multiple
           className="hidden"
           disabled={isUploading}
@@ -174,9 +205,14 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
           </div>
           <div>
             <p className="text-sm font-medium text-zinc-300">
-              {isUploading ? "Uploading..." : <>Drop images here or <span className="text-indigo-400">browse</span></>}
+              {isUploading
+                ? "Uploading..."
+                : <><span>Drop images here or </span><span className="text-indigo-400">browse</span></>
+              }
             </p>
-            <p className="text-xs text-zinc-600 mt-1">PNG, JPG, WEBP · Up to 8MB each </p>
+            <p className="text-xs text-zinc-600 mt-1">
+              PNG, JPG, WEBP, HEIC · Up to 8MB each · HEIC auto-converted
+            </p>
           </div>
         </div>
       </div>
@@ -196,30 +232,24 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={img.preview} alt="Preview" className="w-full h-full object-cover" />
 
-              {/* Uploading spinner */}
               {img.status === "uploading" && (
                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                   <Loader2 className="w-6 h-6 text-white animate-spin" />
                 </div>
               )}
 
-              {/* Success tick */}
               {img.status === "success" && (
                 <div className="absolute top-2 right-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 drop-shadow" />
                 </div>
               )}
 
-              {/* Error state */}
               {img.status === "error" && (
                 <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
                   <p className="text-red-400 text-xs font-medium px-2 text-center">Upload failed</p>
                 </div>
               )}
 
-
-
-              {/* Hover actions */}
               {img.status !== "uploading" && (
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                   {!img.isPrimary && img.status === "success" && (
@@ -241,14 +271,12 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
                 </div>
               )}
 
-              {/* Primary badge */}
               {img.isPrimary && (
                 <div className="absolute top-2 left-2 flex items-center gap-1 bg-indigo-600/90 text-white text-[10px] font-medium px-2 py-0.5 rounded-full">
                   <Star className="w-2.5 h-2.5 fill-current" />Primary
                 </div>
               )}
 
-              {/* Filename */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-2 py-2">
                 <p className="text-[10px] text-zinc-300 truncate">{img.file.name}</p>
               </div>
@@ -257,7 +285,6 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
         </div>
       )}
 
-      {/* Status line */}
       {previews.length > 0 && (
         <p className="text-xs text-zinc-600">
           {previews.filter((p) => p.status === "success").length} of {previews.length} uploaded
