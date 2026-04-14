@@ -1,11 +1,12 @@
 import Link from "next/link"
 
 const navLinks = [
-    { label: "UK Sales", href: "#uk-sales" },
-    { label: "Export Sales", href: "#export-sales" },
-    { label: "Leasing", href: "#leasing" },
-    { label: "Collection & Storage", href: "#collection-storage" },
-    { label: "Sell To Us", href: "#sell-your-copier" },
+    { label: "Home", href: "/" },
+    { label: "UK Sales", href: "/uk-sales" },
+    { label: "Export Sales", href: "/export-sales" },
+    { label: "Leasing", href: "/leasing" },
+    { label: "Collection & Storage", href: "/collection-storage" },
+    { label: "Sell To Us", href: "/sell-to-us" },
 ]
 
 export default function DesktopNav() {
@@ -43,7 +44,7 @@ export default function DesktopNav() {
 
             {/* CTA */}
             <Link
-                href="#sell-form"
+                href="/sell-to-us"
                 className="shrink-0 bg-white text-black font-semibold px-4 py-2 rounded
                            transition-all duration-300
                            hover:bg-white/90 hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]

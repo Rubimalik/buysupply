@@ -1,32 +1,20 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
 
 const navLinks = [
-    { label: "UK Sales", href: "#uk-sales" },
-    { label: "Export Sales", href: "#export-sales" },
-    { label: "Leasing", href: "#leasing" },
-    { label: "Collection & Storage", href: "#collection-storage" },
-    { label: "Sell To Us", href: "#sell-your-copier" },
+    { label: "Home", href: "/" },
+    { label: "UK Sales", href: "/uk-sales" },
+    { label: "Export Sales", href: "/export-sales" },
+    { label: "Leasing", href: "/leasing" },
+    { label: "Collection & Storage", href: "/collection-storage" },
+    { label: "Sell To Us", href: "/sell-to-us" },
 ]
 
 export default function MobileNav() {
     const [menuOpen, setMenuOpen] = useState(false)
-    const [visible, setVisible] = useState(false)
-    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-    useEffect(() => {
-        if (menuOpen) {
-            // mount first, then trigger transition on next frame
-            setVisible(false)
-            timerRef.current = setTimeout(() => setVisible(true), 10)
-        } else {
-            setVisible(false)
-        }
-        return () => { if (timerRef.current) clearTimeout(timerRef.current) }
-    }, [menuOpen])
 
     return (
         <div className="w-full relative">
@@ -78,8 +66,8 @@ export default function MobileNav() {
                     className="absolute top-full left-0 w-full bg-black/95 backdrop-blur-sm border-t border-white/10 px-4 pb-5 z-50 overflow-hidden"
                     style={{
                         transition: "opacity 300ms ease, transform 300ms ease",
-                        opacity: visible ? 1 : 0,
-                        transform: visible ? "translateY(0)" : "translateY(-10px)",
+                        opacity: 1,
+                        transform: "translateY(0)",
                     }}
                 >
                     <ul className="flex flex-col pt-2">
@@ -94,9 +82,9 @@ export default function MobileNav() {
                                         fontSize: "clamp(12px, 3.5vw, 15px)",
                                         transitionProperty: "color, padding-left, opacity, transform",
                                         transitionDuration: "200ms",
-                                        opacity: visible ? 1 : 0,
-                                        transform: visible ? "translateX(0)" : "translateX(-8px)",
-                                        transitionDelay: visible ? `${i * 50}ms` : "0ms",
+                                        opacity: 1,
+                                        transform: "translateX(0)",
+                                        transitionDelay: `${i * 50}ms`,
                                     }}
                                 >
                                     {link.label}
@@ -107,15 +95,15 @@ export default function MobileNav() {
 
                     {/* Mobile CTA */}
                     <Link
-                        href="#sell-form"
+                        href="/sell-to-us"
                         onClick={() => setMenuOpen(false)}
                         className="mt-4 flex items-center justify-center bg-white text-black font-semibold py-2.5 rounded
                                    transition-all duration-300 hover:bg-white/90 hover:scale-[1.02] active:scale-95 w-full"
                         style={{
                             fontSize: "clamp(12px, 3.5vw, 14px)",
-                            opacity: visible ? 1 : 0,
-                            transform: visible ? "translateY(0)" : "translateY(6px)",
-                            transitionDelay: visible ? `${navLinks.length * 50}ms` : "0ms",
+                            opacity: 1,
+                            transform: "translateY(0)",
+                            transitionDelay: `${navLinks.length * 50}ms`,
                         }}
                     >
                         Get a Quote
