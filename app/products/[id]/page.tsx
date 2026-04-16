@@ -18,9 +18,10 @@ async function getProduct(id: string) {
 
 // ── Dynamic metadata per product ─────────────────────────────────────────
 export async function generateMetadata(
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
-  const product = await getProduct(params.id);
+  const { id } = await params;
+  const product = await getProduct(id);
 
   if (!product) {
     return {
@@ -105,8 +106,9 @@ function ProductSchema({ product }: { product: any }) {
 }
 
 // ── Page component ────────────────────────────────────────────────────────
-export default async function Page({ params }: { params: { id: string } }) {
-  const product = await getProduct(params.id);
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const product = await getProduct(id);
 
   return (
     <>

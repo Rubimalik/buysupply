@@ -40,7 +40,7 @@ const myriadPro = localFont({
   variable: '--font-myriad'
 })
 
-export const roboto = Roboto({
+const roboto = Roboto({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-roboto", // optional CSS variable

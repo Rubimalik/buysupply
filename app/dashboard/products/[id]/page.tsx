@@ -131,7 +131,34 @@ export default function ProductEditPage() {
         </div>
     );
 
-    const images = product.images;
+    // Natural numerical sorting for image filenames
+    const naturalSort = (a: ProductImage, b: ProductImage) => {
+        const getFilename = (url: string) => {
+            const parts = url.split('/');
+            return parts[parts.length - 1];
+        };
+        
+        const filenameA = getFilename(a.url);
+        const filenameB = getFilename(b.url);
+        
+        // Extract numbers from filenames for natural sorting
+        const extractNumbers = (str: string) => {
+            const match = str.match(/\d+/);
+            return match ? parseInt(match[0], 10) : 0;
+        };
+        
+        const numA = extractNumbers(filenameA);
+        const numB = extractNumbers(filenameB);
+        
+        if (numA !== numB) {
+            return numA - numB;
+        }
+        
+        // Fallback to alphabetical sort if numbers are the same
+        return filenameA.localeCompare(filenameB);
+    };
+    
+    const images = [...product.images].sort(naturalSort);
     const cfg = STATUS_CONFIG[status as keyof typeof STATUS_CONFIG] ?? STATUS_CONFIG.draft;
 
     return (
