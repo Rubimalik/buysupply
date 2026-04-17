@@ -202,10 +202,10 @@ export default function ProductEditPage() {
             {/* ── Header ── */}
             <div className="flex items-center justify-between gap-4 flex-wrap">
                 <div className="flex items-center gap-3">
-                    <button onClick={() => router.push("/dashboard/products")}
+                    <Link href="/dashboard/products/all-products"
                         className="w-8 h-8 rounded-lg border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white hover:border-zinc-500 transition-all">
                         <ChevronLeft className="w-4 h-4" />
-                    </button>
+                    </Link>
                     <div>
                         <h1 className="text-xl font-semibold text-white tracking-tight truncate max-w-md">{product.name}</h1>
                         <p className="text-xs text-zinc-500 mt-0.5">
