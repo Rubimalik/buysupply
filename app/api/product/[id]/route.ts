@@ -40,36 +40,107 @@ export async function PUT(
       return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
 
     const body = await req.json();
-    const { name, description, url, price, status, tags, categoryId, images } = body;
+    const {
+      name,
+      description,
+      url,
+      price,
+      status,
+      tags,
+      categoryId,
+      images,
+      newImages,
+      editedImages,
+    } = body;
 
     const data: Record<string, unknown> = {};
-    if (name        !== undefined) data.name        = name;
+    if (name !== undefined) data.name = name;
     if (description !== undefined) data.description = description || null;
-    if (url         !== undefined) data.url         = url || null;
-    if (price       !== undefined) data.price       = price ?? null;
-    if (status      !== undefined) data.status      = status;
-    if (tags        !== undefined) data.tags        = tags || null;
-    if (categoryId  !== undefined) data.categoryId  = categoryId ?? null;
+    if (url !== undefined) data.url = url || null;
+    if (price !== undefined) data.price = price ?? null;
+    if (status !== undefined) data.status = status;
+    if (tags !== undefined) data.tags = tags || null;
+    if (categoryId !== undefined) data.categoryId = categoryId ?? null;
 
     if (images !== undefined) {
       data.images = {
         deleteMany: {},
-        create: images.map((img: { url: string; key: string; isPrimary?: boolean }, i: number) => ({
-          url: img.url, key: img.key, isPrimary: img.isPrimary ?? i === 0,
-        })),
+        create: images.map(
+          (
+            img: { url: string; key: string; isPrimary?: boolean },
+            i: number,
+          ) => ({
+            url: img.url,
+            key: img.key,
+            isPrimary: img.isPrimary ?? i === 0,
+          }),
+        ),
       };
     }
 
     const product = await prisma.product.update({
       where: { id: productId },
-      data:  data as never,
+      data: data as never,
       include: {
-        images:   { orderBy: { isPrimary: "desc" } },
+        images: { orderBy: { isPrimary: "desc" } },
         category: { select: { id: true, name: true, slug: true } },
       },
     });
 
-    return NextResponse.json({ data: product, message: "Product updated successfully" });
+    // Handle reordering and deletion of existing images
+    if (editedImages !== undefined && editedImages.length > 0) {
+      const existingImageIds = new Set(
+        editedImages.map((img: { id: number }) => img.id),
+      );
+      const currentImages = await prisma.productImage.findMany({
+        where: { productId },
+      });
+      const imagesToDelete = currentImages.filter(
+        (img) => !existingImageIds.has(img.id),
+      );
+
+      if (imagesToDelete.length > 0) {
+        await prisma.productImage.deleteMany({
+          where: { id: { in: imagesToDelete.map((img) => img.id) } },
+        });
+      }
+
+      // Update isPrimary for all images based on new order
+      for (let i = 0; i < editedImages.length; i++) {
+        await prisma.productImage.update({
+          where: { id: editedImages[i].id },
+          data: { isPrimary: i === 0 },
+        });
+      }
+    }
+
+    // If newImages are provided, append them to existing images
+    if (newImages !== undefined && newImages.length > 0) {
+      await prisma.productImage.createMany({
+        data: newImages.map(
+          (img: { url: string; key: string; isPrimary?: boolean }) => ({
+            productId,
+            url: img.url,
+            key: img.key,
+            isPrimary: img.isPrimary ?? false,
+          }),
+        ),
+      });
+    }
+
+    // Fetch updated product with new image order
+    const updatedProduct = await prisma.product.findUnique({
+      where: { id: productId },
+      include: {
+        images: { orderBy: { isPrimary: "desc" } },
+        category: { select: { id: true, name: true, slug: true } },
+      },
+    });
+
+    return NextResponse.json({
+      data: updatedProduct,
+      message: "Product updated successfully",
+    });
   } catch (err) {
     console.error("[PUT /api/product/:id]", err);
     return NextResponse.json({ error: "Failed to update product" }, { status: 500 });

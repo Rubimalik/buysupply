@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Upload, X, Star, Loader2, CheckCircle2 } from "lucide-react";
+import { Upload, X, Star, Loader2, CheckCircle2, GripVertical } from "lucide-react";
 import { useUploadThing } from "@/lib/uploadthing-client";
 
 export interface UploadedImage {
@@ -32,6 +32,8 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
   const [previews, setPreviews] = useState<PreviewImage[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
 
   const notify = useCallback(
     (updated: PreviewImage[]) => {
@@ -163,6 +165,46 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
     });
   };
 
+  const handleReorderDragStart = (e: React.DragEvent, id: string) => {
+    e.stopPropagation();
+    setDraggedId(id);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleReorderDragOver = (e: React.DragEvent, id: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = "move";
+    if (id !== draggedId) setDragOverId(id);
+  };
+
+  const handleReorderDrop = (e: React.DragEvent, targetId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!draggedId || draggedId === targetId) {
+      setDraggedId(null);
+      setDragOverId(null);
+      return;
+    }
+    setPreviews((prev) => {
+      const from = prev.findIndex((p) => p.id === draggedId);
+      const to = prev.findIndex((p) => p.id === targetId);
+      if (from === -1 || to === -1) return prev;
+      const updated = [...prev];
+      const [item] = updated.splice(from, 1);
+      updated.splice(to, 0, item);
+      notify(updated);
+      return updated;
+    });
+    setDraggedId(null);
+    setDragOverId(null);
+  };
+
+  const handleReorderDragEnd = () => {
+    setDraggedId(null);
+    setDragOverId(null);
+  };
+
   return (
     <div className="space-y-3">
       {/* Drop zone */}
@@ -219,12 +261,23 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
 
       {/* Preview grid */}
       {previews.length > 0 && (
+        <>
+          <p className="text-xs text-zinc-500">Drag images to reorder</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {previews.map((img) => (
             <div
               key={img.id}
-              className={`relative group rounded-xl overflow-hidden border aspect-square transition-all ${
-                img.isPrimary
+              draggable
+              onDragStart={(e) => handleReorderDragStart(e, img.id)}
+              onDragOver={(e) => handleReorderDragOver(e, img.id)}
+              onDrop={(e) => handleReorderDrop(e, img.id)}
+              onDragEnd={handleReorderDragEnd}
+              onDragLeave={() => setDragOverId(null)}
+              className={`relative group rounded-xl overflow-hidden border aspect-square transition-all cursor-grab active:cursor-grabbing ${draggedId === img.id
+                  ? "opacity-40 scale-95"
+                  : dragOverId === img.id
+                    ? "border-indigo-400 ring-2 ring-indigo-400/40 scale-105"
+                    : img.isPrimary
                   ? "border-indigo-500/70 ring-1 ring-indigo-500/30"
                   : "border-zinc-800 hover:border-zinc-600"
               }`}
@@ -249,6 +302,13 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
                   <p className="text-red-400 text-xs font-medium px-2 text-center">Upload failed</p>
                 </div>
               )}
+
+              {/* Drag handle */}
+              <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                <div className="w-6 h-6 rounded bg-black/50 flex items-center justify-center">
+                  <GripVertical className="w-3.5 h-3.5 text-white/70" />
+                </div>
+              </div>
 
               {img.status !== "uploading" && (
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
@@ -283,6 +343,7 @@ export function ImageUpload({ onChange, value = [] }: ImageUploadProps) {
             </div>
           ))}
         </div>
+        </>
       )}
 
       {previews.length > 0 && (

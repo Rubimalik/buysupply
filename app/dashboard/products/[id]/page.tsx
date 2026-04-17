@@ -5,9 +5,11 @@ import { useParams, useRouter } from "next/navigation";
 import {
     ChevronLeft, Loader2, Save, CheckCircle2, AlertCircle,
     ImageOff, Tag, Calendar, Package, Layers, DollarSign,
-    Trash2, ExternalLink, ChevronLeft as Prev, ChevronRight as Next, Link2,
+    Trash2, ExternalLink, ChevronLeft as Prev, ChevronRight as Next, Link2, GripVertical,
 } from "lucide-react";
 import { HeicImage } from "@/components/HeicImage";
+import { ImageUpload, type UploadedImage } from "@/components/dashboard/ImageUpload";
+import Link from "next/link";
 
 interface ProductImage { id: number; url: string; isPrimary: boolean; }
 interface Category { id: number; name: string; slug: string; }
@@ -36,6 +38,10 @@ export default function ProductEditPage() {
     const [error, setError] = useState("");
     const [categories, setCategories] = useState<Category[]>([]);
     const [activeImg, setActiveImg] = useState(0);
+    const [newImages, setNewImages] = useState<UploadedImage[]>([]);
+    const [editedImages, setEditedImages] = useState<ProductImage[]>([]);
+    const [draggedImgId, setDraggedImgId] = useState<number | null>(null);
+    const [dragOverImgId, setDragOverImgId] = useState<number | null>(null);
 
     // Editable fields
     const [name, setName] = useState("");
@@ -54,6 +60,7 @@ export default function ProductEditPage() {
             if (pData.error) throw new Error(pData.error);
             const p: Product = pData.data;
             setProduct(p);
+            setEditedImages(p.images);
             setName(p.name);
             setDescription(p.description || "");
             setPrice(p.price != null ? String(p.price) : "");
@@ -65,6 +72,52 @@ export default function ProductEditPage() {
         }).catch((e) => setError(e.message))
             .finally(() => setLoading(false));
     }, [id]);
+
+    const handleDeleteExistingImage = (imageId: number) => {
+        setEditedImages((prev) => prev.filter((img) => img.id !== imageId));
+        if (activeImg >= editedImages.length - 1 && activeImg > 0) {
+            setActiveImg(activeImg - 1);
+        }
+    };
+
+    const handleReorderDragStart = (e: React.DragEvent, id: number) => {
+        e.stopPropagation();
+        setDraggedImgId(id);
+        e.dataTransfer.effectAllowed = "move";
+    };
+
+    const handleReorderDragOver = (e: React.DragEvent, id: number) => {
+        e.preventDefault();
+        e.stopPropagation();
+        e.dataTransfer.dropEffect = "move";
+        if (id !== draggedImgId) setDragOverImgId(id);
+    };
+
+    const handleReorderDrop = (e: React.DragEvent, targetId: number) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!draggedImgId || draggedImgId === targetId) {
+            setDraggedImgId(null);
+            setDragOverImgId(null);
+            return;
+        }
+        setEditedImages((prev) => {
+            const from = prev.findIndex((img) => img.id === draggedImgId);
+            const to = prev.findIndex((img) => img.id === targetId);
+            if (from === -1 || to === -1) return prev;
+            const updated = [...prev];
+            const [item] = updated.splice(from, 1);
+            updated.splice(to, 0, item);
+            return updated;
+        });
+        setDraggedImgId(null);
+        setDragOverImgId(null);
+    };
+
+    const handleReorderDragEnd = () => {
+        setDraggedImgId(null);
+        setDragOverImgId(null);
+    };
 
     const handleSave = async () => {
         setSaving(true);
@@ -81,11 +134,15 @@ export default function ProductEditPage() {
                     status,
                     tags: tags || null,
                     categoryId: categoryId ? parseInt(categoryId) : null,
+                    editedImages: editedImages.map((img) => ({ id: img.id, isPrimary: editedImages[0]?.id === img.id })),
+                    newImages: newImages.length > 0 ? newImages.map((img) => ({ url: img.url, key: img.key, isPrimary: false })) : undefined,
                 }),
             });
             if (!res.ok) throw new Error("Failed to save");
             const data = await res.json();
             setProduct(data.data);
+            setEditedImages(data.data.images);
+            setNewImages([]);
             setSaveState("success");
             setTimeout(() => setSaveState("idle"), 3000);
         } catch {
@@ -107,6 +164,9 @@ export default function ProductEditPage() {
         }
     };
 
+    const imagesChanged = editedImages.length !== product?.images.length ||
+        editedImages.some((img, i) => img.id !== product?.images[i]?.id);
+
     const isDirty = product && (
         name !== product.name ||
         description !== (product.description || "") ||
@@ -114,7 +174,9 @@ export default function ProductEditPage() {
         price !== (product.price != null ? String(product.price) : "") ||
         status !== product.status ||
         tags !== (product.tags || "") ||
-        categoryId !== (product.categoryId ? String(product.categoryId) : "")
+        categoryId !== (product.categoryId ? String(product.categoryId) : "") ||
+        newImages.length > 0 ||
+        imagesChanged
     );
 
     if (loading) return (
@@ -127,38 +189,11 @@ export default function ProductEditPage() {
         <div className="flex flex-col items-center gap-3 py-20">
             <AlertCircle className="w-8 h-8 text-red-400" />
             <p className="text-zinc-400 text-sm">{error || "Product not found"}</p>
-            <button onClick={() => router.back()} className="text-indigo-400 text-sm hover:underline">← Go back</button>
+            <Link href="/dashboard/products/all-products" className="text-indigo-400 text-sm hover:underline">← Go back</Link>
         </div>
     );
 
-    // Natural numerical sorting for image filenames
-    const naturalSort = (a: ProductImage, b: ProductImage) => {
-        const getFilename = (url: string) => {
-            const parts = url.split('/');
-            return parts[parts.length - 1];
-        };
-        
-        const filenameA = getFilename(a.url);
-        const filenameB = getFilename(b.url);
-        
-        // Extract numbers from filenames for natural sorting
-        const extractNumbers = (str: string) => {
-            const match = str.match(/\d+/);
-            return match ? parseInt(match[0], 10) : 0;
-        };
-        
-        const numA = extractNumbers(filenameA);
-        const numB = extractNumbers(filenameB);
-        
-        if (numA !== numB) {
-            return numA - numB;
-        }
-        
-        // Fallback to alphabetical sort if numbers are the same
-        return filenameA.localeCompare(filenameB);
-    };
-    
-    const images = [...product.images].sort(naturalSort);
+    const images = editedImages;
     const cfg = STATUS_CONFIG[status as keyof typeof STATUS_CONFIG] ?? STATUS_CONFIG.draft;
 
     return (
@@ -231,7 +266,7 @@ export default function ProductEditPage() {
 
                         <div className="p-4 space-y-3">
                             {/* Main image */}
-                            <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-zinc-900">
+                            <div className="relative aspect-4/3 rounded-xl overflow-hidden bg-zinc-900">
                                 {images[activeImg] ? (
                                     <HeicImage src={images[activeImg].url} alt={product.name} className="w-full h-full object-cover" />
                                 ) : (
@@ -257,15 +292,73 @@ export default function ProductEditPage() {
                                 )}
                             </div>
 
-                            {/* Thumbnails */}
+                            {/* Thumbnails - Draggable */}
                             {images.length > 1 && (
-                                <div className="flex gap-2 overflow-x-auto pb-1">
-                                    {images.map((img, i) => (
-                                        <button key={img.id} onClick={() => setActiveImg(i)}
-                                            className={`shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-all ${i === activeImg ? "border-indigo-500" : "border-zinc-700 hover:border-zinc-500"}`}>
-                                            <HeicImage src={img.url} alt="" className="w-full h-full object-cover" />
-                                        </button>
-                                    ))}
+                                <>
+                                    <p className="text-xs text-zinc-500">Drag to reorder images</p>
+                                    <div className="flex gap-2 overflow-x-auto pb-1">
+                                        {images.map((img, i) => (
+                                            <div
+                                                key={img.id}
+                                                draggable
+                                                onDragStart={(e) => handleReorderDragStart(e, img.id)}
+                                                onDragOver={(e) => handleReorderDragOver(e, img.id)}
+                                                onDrop={(e) => handleReorderDrop(e, img.id)}
+                                                onDragEnd={handleReorderDragEnd}
+                                                onDragLeave={() => setDragOverImgId(null)}
+                                                className={`relative group shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 cursor-grab active:cursor-grabbing transition-all ${draggedImgId === img.id
+                                                    ? "opacity-40 scale-95"
+                                                    : dragOverImgId === img.id
+                                                        ? "border-indigo-400 ring-2 ring-indigo-400/40 scale-105"
+                                                        : i === activeImg
+                                                            ? "border-indigo-500"
+                                                            : "border-zinc-700 hover:border-zinc-500"
+                                                    }`}
+                                            >
+                                                <button onClick={() => setActiveImg(i)} className="w-full h-full">
+                                                    <HeicImage src={img.url} alt="" className="w-full h-full object-cover" />
+                                                </button>
+                                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => { e.stopPropagation(); handleDeleteExistingImage(img.id); }}
+                                                        className="w-6 h-6 rounded bg-red-500/20 text-red-400 border border-red-500/30 flex items-center justify-center hover:bg-red-500/30 transition-colors"
+                                                    >
+                                                        <Trash2 className="w-3 h-3" />
+                                                    </button>
+                                                </div>
+                                                <div className="absolute top-0.5 left-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <div className="w-4 h-4 rounded bg-black/50 flex items-center justify-center">
+                                                        <GripVertical className="w-2.5 h-2.5 text-white/70" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+
+                            {/* Add more images */}
+                            <div className="pt-3 border-t border-zinc-800/50">
+                                <h3 className="text-xs font-semibold text-zinc-400 mb-3">Add more images</h3>
+                                <ImageUpload onChange={(imgs) => setNewImages(imgs)} />
+                            </div>
+
+                            {/* New images preview */}
+                            {newImages.length > 0 && (
+                                <div className="pt-3 border-t border-zinc-800/50">
+                                    <h3 className="text-xs font-semibold text-zinc-400 mb-3">New uploads ({newImages.length})</h3>
+                                    <div className="grid grid-cols-4 gap-2">
+                                        {newImages.map((img) => (
+                                            <div key={img.key} className="relative group rounded-lg overflow-hidden border border-emerald-500/40 bg-emerald-500/5">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img src={img.url} alt="New" className="w-full aspect-square object-cover" />
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <span className="text-[10px] text-emerald-300 font-medium">New</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             )}
                         </div>
@@ -450,6 +543,8 @@ export default function ProductEditPage() {
                                     setPrice(product.price != null ? String(product.price) : "");
                                     setStatus(product.status); setTags(product.tags || "");
                                     setCategoryId(product.categoryId ? String(product.categoryId) : "");
+                                    setNewImages([]);
+                                    setEditedImages(product.images);
                                 }} className="px-3 py-2 text-xs text-zinc-400 border border-zinc-700 hover:border-zinc-500 rounded-lg transition-all">
                                     Discard
                                 </button>
