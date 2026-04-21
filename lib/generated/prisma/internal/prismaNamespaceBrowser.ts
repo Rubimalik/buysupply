@@ -95,6 +95,7 @@ export const ProductImageScalarFieldEnum = {
   url: 'url',
   key: 'key',
   isPrimary: 'isPrimary',
+  order: 'order',
   createdAt: 'createdAt'
 } as const
 

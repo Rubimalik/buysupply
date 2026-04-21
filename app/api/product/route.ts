@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
       prisma.product.findMany({
         where,
         include: {
-          images:   { orderBy: { isPrimary: "desc" } },
+          images:   { orderBy: { order: "asc" } },
           category: { select: { id: true, name: true, slug: true } },
         },
         orderBy: { createdAt: "desc" },
@@ -84,12 +84,12 @@ export async function POST(req: NextRequest) {
         categoryId:  categoryId ?? null,
         images: {
           create: images.map((img, i) => ({
-            url: img.url, key: img.key, isPrimary: img.isPrimary ?? i === 0,
+            url: img.url, key: img.key, isPrimary: img.isPrimary ?? i === 0, order: i,
           })),
         },
       },
       include: {
-        images:   { orderBy: { isPrimary: "desc" } },
+        images:   { orderBy: { order: "asc" } },
         category: { select: { id: true, name: true, slug: true } },
       },
     });

@@ -14,7 +14,7 @@ export async function GET(
     const product = await prisma.product.findUnique({
       where: { id: productId },
       include: {
-        images:   { orderBy: { isPrimary: "desc" } },
+        images:   { orderBy: { order: "asc" } },
         category: { select: { id: true, name: true, slug: true } },
       },
     });
@@ -82,7 +82,7 @@ export async function PUT(
       where: { id: productId },
       data: data as never,
       include: {
-        images: { orderBy: { isPrimary: "desc" } },
+        images: { orderBy: { order: "asc" } },
         category: { select: { id: true, name: true, slug: true } },
       },
     });
@@ -105,24 +105,31 @@ export async function PUT(
         });
       }
 
-      // Update isPrimary for all images based on new order
+      // Update isPrimary and order for all images based on new order
       for (let i = 0; i < editedImages.length; i++) {
         await prisma.productImage.update({
           where: { id: editedImages[i].id },
-          data: { isPrimary: i === 0 },
+          data: { isPrimary: i === 0, order: i },
         });
       }
     }
 
     // If newImages are provided, append them to existing images
     if (newImages !== undefined && newImages.length > 0) {
+      // Find the current max order so new images go at the end
+      const maxOrder = await prisma.productImage.aggregate({
+        where: { productId },
+        _max: { order: true },
+      });
+      const startOrder = (maxOrder._max.order ?? -1) + 1;
       await prisma.productImage.createMany({
         data: newImages.map(
-          (img: { url: string; key: string; isPrimary?: boolean }) => ({
+          (img: { url: string; key: string; isPrimary?: boolean }, i: number) => ({
             productId,
             url: img.url,
             key: img.key,
-            isPrimary: img.isPrimary ?? false,
+            isPrimary: false,
+            order: startOrder + i,
           }),
         ),
       });
@@ -132,7 +139,7 @@ export async function PUT(
     const updatedProduct = await prisma.product.findUnique({
       where: { id: productId },
       include: {
-        images: { orderBy: { isPrimary: "desc" } },
+        images: { orderBy: { order: "asc" } },
         category: { select: { id: true, name: true, slug: true } },
       },
     });

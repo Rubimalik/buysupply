@@ -134,8 +134,8 @@ export default function ProductEditPage() {
                     status,
                     tags: tags || null,
                     categoryId: categoryId ? parseInt(categoryId) : null,
-                    editedImages: editedImages.map((img) => ({ id: img.id, isPrimary: editedImages[0]?.id === img.id })),
-                    newImages: newImages.length > 0 ? newImages.map((img) => ({ url: img.url, key: img.key, isPrimary: false })) : undefined,
+                    editedImages: editedImages.map((img) => ({ id: img.id })),
+                    newImages: newImages.length > 0 ? newImages.map((img) => ({ url: img.url, key: img.key })) : undefined,
                 }),
             });
             if (!res.ok) throw new Error("Failed to save");
