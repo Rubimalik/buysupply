@@ -80,34 +80,8 @@ export default function ProductDetailPage() {
 
   const tags = product.tags?.split(",").map((t) => t.trim()).filter(Boolean) ?? [];
 
-  // Natural numerical sorting for image filenames
-  const naturalSort = (a: ProductImage, b: ProductImage) => {
-    const getFilename = (url: string) => {
-      const parts = url.split('/');
-      return parts[parts.length - 1];
-    };
-    
-    const filenameA = getFilename(a.url);
-    const filenameB = getFilename(b.url);
-    
-    // Extract numbers from filenames for natural sorting
-    const extractNumbers = (str: string) => {
-      const match = str.match(/\d+/);
-      return match ? parseInt(match[0], 10) : 0;
-    };
-    
-    const numA = extractNumbers(filenameA);
-    const numB = extractNumbers(filenameB);
-    
-    if (numA !== numB) {
-      return numA - numB;
-    }
-    
-    // Fallback to alphabetical sort if numbers are the same
-    return filenameA.localeCompare(filenameB);
-  };
-  
-  const images = product.images.length > 0 ? [...product.images].sort(naturalSort) : [];
+  // Images come pre-sorted from API by order field
+  const images = product.images.length > 0 ? product.images : [];
   const currentImg = images[activeImg];
 
   return (
